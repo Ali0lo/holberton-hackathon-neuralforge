@@ -1,0 +1,59 @@
+skill,course_title,provider,url,level,duration_hours,price_type,quality_score
+Python,AI Python for Beginners,DeepLearning.AI,https://learn.deeplearning.ai/courses/ai-python-for-beginners/information,beginner,4,free,0.92
+Machine Learning,Machine Learning Crash Course,Google,https://developers.google.com/machine-learning/crash-course,beginner,15,free,0.94
+Deep Learning,Practical Deep Learning for Coders,fast.ai,https://course.fast.ai/,intermediate,30,free,0.96
+Large Language Models,Generative AI with LLMs,DeepLearning.AI / AWS,https://www.coursera.org/learn/generative-ai-with-llms,intermediate,16,paid,0.9
+Natural Language Processing,NLP Specialization,DeepLearning.AI,https://www.coursera.org/specializations/natural-language-processing,intermediate,40,paid,0.89
+PyTorch,Deep Learning with PyTorch,PyTorch,https://pytorch.org/tutorials/,intermediate,20,free,0.91
+TensorFlow,TensorFlow Tutorials,TensorFlow,https://www.tensorflow.org/tutorials,intermediate,18,free,0.89
+Scikit-learn,scikit-learn Tutorials,scikit-learn,https://scikit-learn.org/stable/tutorial/index.html,beginner,10,free,0.88
+NumPy,NumPy Quickstart,NumPy,https://numpy.org/doc/stable/user/quickstart.html,beginner,8,free,0.87
+Pandas,Python Data Science Handbook,Jupyter Book,https://jakevdp.github.io/PythonDataScienceHandbook/,beginner,12,free,0.89
+Statistics,Intro to Statistics,Khan Academy,https://www.khanacademy.org/math/statistics-probability,beginner,20,free,0.9
+SQL,Intro to SQL for Data Science,Coursera,https://www.coursera.org/learn/sql-for-data-science,beginner,12,paid,0.86
+Data Visualization,Data Visualization with Python,IBM / Coursera,https://www.coursera.org/learn/python-for-data-visualization,beginner,18,paid,0.84
+MLOps,MLOps Zoomcamp,DataTalksClub,https://github.com/DataTalksClub/mlops-zoomcamp,intermediate,40,free,0.93
+Docker,Docker 101 Tutorial,Docker,https://www.docker.com/101-tutorial/,beginner,6,free,0.88
+Kubernetes,Kubernetes Basics,Kubernetes,https://kubernetes.io/docs/tutorials/kubernetes-basics/,intermediate,12,free,0.87
+CI/CD,CI/CD for Machine Learning,Google Cloud,https://www.cloudskillsboost.google/,intermediate,10,free,0.82
+Cloud,Google Cloud Skills Boost,Google Cloud,https://www.cloudskillsboost.google/,beginner,12,free,0.83
+APIs,APIs for Beginners,freeCodeCamp,https://www.freecodecamp.org/news/tag/apis/,beginner,8,free,0.8
+Git,Introduction to Git and GitHub,Coursera,https://www.coursera.org/learn/introduction-git-github,beginner,10,paid,0.85
+Excel,Excel Skills for Business,Coursera,https://www.coursera.org/specializations/excel,beginner,20,paid,0.84
+BI Tools,Power BI Learning,Microsoft,https://learn.microsoft.com/en-us/training/powerplatform/power-bi/,beginner,12,free,0.86
+Dashboarding,Data Visualization with Tableau,Coursera,https://www.coursera.org/learn/data-visualization-tableau,beginner,16,paid,0.83
+ETL,ETL and Data Pipelines with Shell Airflow and Kafka,IBM / Coursera,https://www.coursera.org/learn/etl-and-data-pipelines-shell-airflow-kafka,intermediate,16,paid,0.84
+Data Warehousing,Data Warehousing for Business Intelligence,Coursera,https://www.coursera.org/specializations/data-warehousing,intermediate,24,paid,0.82
+Apache Spark,Spark with Python,DataCamp,https://www.datacamp.com/courses/introduction-to-pyspark,intermediate,10,paid,0.81
+Airflow,Apache Airflow Fundamentals,Astronomer,https://www.astronomer.io/guides/airflow-tutorial/,intermediate,8,free,0.85
+HTML,Responsive Web Design,freeCodeCamp,https://www.freecodecamp.org/learn/2022/responsive-web-design/,beginner,20,free,0.88
+CSS,Responsive Web Design,freeCodeCamp,https://www.freecodecamp.org/learn/2022/responsive-web-design/,beginner,20,free,0.88
+JavaScript,JavaScript Algorithms and Data Structures,freeCodeCamp,https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/,beginner,30,free,0.9
+React,React Official Tutorial,React,https://react.dev/learn,beginner,12,free,0.89
+UI/UX,Google UX Design,Coursera,https://www.coursera.org/professional-certificates/google-ux-design,beginner,120,paid,0.84
+Java,Java Programming and Software Engineering Fundamentals,Coursera,https://www.coursera.org/specializations/java-programming,beginner,40,paid,0.84
+Node.js,Learn Node.js,Codecademy,https://www.codecademy.com/learn/learn-node-js,beginner,10,paid,0.8
+Networking,Introduction to Networking,Cisco,https://skillsforall.com/,beginner,15,free,0.87
+Linux,Introduction to Linux,The Linux Foundation,https://training.linuxfoundation.org/training/introduction-to-linux/,beginner,30,free,0.91
+Security Fundamentals,Introduction to Cybersecurity,Cisco,https://skillsforall.com/,beginner,12,free,0.88
+SIEM,Splunk Fundamentals 1,Splunk,https://www.splunk.com/en_us/training/free-courses/splunk-fundamentals-1.html,beginner,8,free,0.86
+Incident Response,Incident Response Training,TryHackMe,https://tryhackme.com/,intermediate,12,paid,0.83
+Testing,Software Testing Fundamentals,Udemy,https://www.udemy.com/,beginner,10,paid,0.75
+Automation Testing,Selenium WebDriver with Python,Udemy,https://www.udemy.com/,intermediate,15,paid,0.76
+Selenium,Selenium Documentation,Selenium,https://www.selenium.dev/documentation/,beginner,10,free,0.82
+API Testing,Postman API Fundamentals,Postman,https://academy.postman.com/,beginner,6,free,0.85
+Business Analysis,Business Analysis Fundamentals,Coursera,https://www.coursera.org/learn/business-analysis-process,beginner,10,paid,0.8
+Requirements Gathering,Requirements Elicitation,Udemy,https://www.udemy.com/,beginner,8,paid,0.72
+Process Modeling,BPMN for Business Analysts,Udemy,https://www.udemy.com/,beginner,8,paid,0.7
+Documentation,Technical Writing,Google,https://developers.google.com/tech-writing,beginner,8,free,0.84
+Stakeholder Communication,Communication Skills for Engineers,Coursera,https://www.coursera.org/,beginner,8,paid,0.72
+Mathematics,Mathematics for Machine Learning,Coursera,https://www.coursera.org/specializations/mathematics-machine-learning,intermediate,45,paid,0.9
+Research,How to Write and Publish a Scientific Paper,Coursera,https://www.coursera.org/learn/how-to-write-a-scientific-paper,intermediate,12,paid,0.82
+Experimentation,A/B Testing,Coursera,https://www.coursera.org/learn/ab-testing,intermediate,10,paid,0.81
+Computer Vision,Deep Learning for Computer Vision,PyImageSearch,https://pyimagesearch.com/,intermediate,25,paid,0.8
+Vector Databases,Vector Databases for Embeddings,Pinecone,https://www.pinecone.io/learn/,intermediate,6,free,0.84
+RAG,RAG from Scratch,LlamaIndex,https://docs.llamaindex.ai/,intermediate,10,free,0.85
+Data Structures,Data Structures,UCSD / Coursera,https://www.coursera.org/learn/data-structures,intermediate,18,paid,0.85
+Algorithms,Algorithms Part I,Princeton / Coursera,https://www.coursera.org/learn/algorithms-part1,intermediate,25,paid,0.89
+System Design,System Design Primer,GitHub,https://github.com/donnemartin/system-design-primer,intermediate,20,free,0.9
+Feature Engineering,Feature Engineering for ML,Udemy,https://www.udemy.com/,intermediate,12,paid,0.76

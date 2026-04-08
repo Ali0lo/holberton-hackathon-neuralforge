@@ -1,0 +1,96 @@
+role,skill,weight
+machine learning engineer,python,5
+machine learning engineer,machine learning,5
+machine learning engineer,pytorch,4
+machine learning engineer,data preprocessing,4
+machine learning engineer,statistics,3
+
+ai engineer,python,5
+ai engineer,deep learning,5
+ai engineer,transformers,4
+ai engineer,mlops,3
+ai engineer,large language models,4
+
+data scientist,python,5
+data scientist,statistics,5
+data scientist,sql,4
+data scientist,data visualization,4
+data scientist,machine learning,4
+
+data analyst,sql,5
+data analyst,excel,5
+data analyst,data visualization,4
+data analyst,tableau,4
+data analyst,statistics,3
+
+backend engineer,python,5
+backend engineer,apis,5
+backend engineer,databases,4
+backend engineer,system design,4
+backend engineer,docker,3
+
+frontend engineer,javascript,5
+frontend engineer,react,5
+frontend engineer,css,4
+frontend engineer,html,4
+frontend engineer,web development,4
+
+full stack engineer,python,4
+full stack engineer,react,4
+full stack engineer,databases,4
+full stack engineer,apis,4
+full stack engineer,javascript,4
+
+devops engineer,docker,5
+devops engineer,kubernetes,5
+devops engineer,ci/cd,5
+devops engineer,linux,4
+devops engineer,cloud computing,4
+
+cloud engineer,aws,5
+cloud engineer,terraform,4
+cloud engineer,networking,4
+cloud engineer,linux,4
+cloud engineer,cloud security,3
+
+cybersecurity analyst,network security,4
+cybersecurity analyst,incident response,4
+cybersecurity analyst,siem,4
+cybersecurity analyst,linux,3
+cybersecurity analyst,threat analysis,4
+
+soc analyst,siem,5
+soc analyst,log analysis,5
+soc analyst,incident response,4
+soc analyst,network security,3
+soc analyst,threat detection,4
+
+cybersecurity engineer,network security,5
+cybersecurity engineer,cloud security,4
+cybersecurity engineer,firewalls,4
+cybersecurity engineer,linux,3
+cybersecurity engineer,security architecture,4
+
+penetration tester,penetration testing,5
+penetration tester,web security,5
+penetration tester,owasp,5
+penetration tester,python,3
+penetration tester,linux,3
+
+software engineer,python,5
+software engineer,data structures,5
+software engineer,algorithms,5
+software engineer,system design,4
+software engineer,git,4
+
+data engineer,python,5
+data engineer,sql,5
+data engineer,etl,5
+data engineer,data pipelines,5
+data engineer,spark,4
+
+mlops engineer,mlops,5
+mlops engineer,docker,5
+mlops engineer,kubernetes,5
+mlops engineer,python,4
+mlops engineer,cloud computing,4
