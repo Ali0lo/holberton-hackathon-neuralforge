@@ -13,8 +13,9 @@ from roleforge.recommender import load_course_catalog, recommend_courses
 from roleforge.strategy import build_strategy
 from roleforge.llm_helper import (
     generate_roleforge_explanation,
-    generate_cv_overview,
     llm_map_user_skills,
+    stream_roleforge_explanation,
+    stream_cv_overview,
 )
 from roleforge.cv_parser import (
     extract_text_from_uploaded_file,
@@ -50,7 +51,9 @@ def parse_user_skills(raw_text: str) -> list[str]:
     return [s.strip() for s in raw_text.split(",") if s.strip()]
 
 
-def build_compact_roadmap(base_roadmap: dict, total_weeks: int) -> list[tuple[str, list[str]]]:
+def build_compact_roadmap(
+    base_roadmap: dict, total_weeks: int
+) -> list[tuple[str, list[str]]]:
     if not base_roadmap:
         return []
 
@@ -70,13 +73,21 @@ def build_compact_roadmap(base_roadmap: dict, total_weeks: int) -> list[tuple[st
     for i in range(1, total_weeks):
         if expanded[i] != current_tasks:
             end_week = i
-            label = f"Week {start_week}" if start_week == end_week else f"Week {start_week}-{end_week}"
+            label = (
+                f"Week {start_week}"
+                if start_week == end_week
+                else f"Week {start_week}-{end_week}"
+            )
             compact.append((label, current_tasks))
             start_week = i + 1
             current_tasks = expanded[i]
 
     end_week = total_weeks
-    label = f"Week {start_week}" if start_week == end_week else f"Week {start_week}-{end_week}"
+    label = (
+        f"Week {start_week}"
+        if start_week == end_week
+        else f"Week {start_week}-{end_week}"
+    )
     compact.append((label, current_tasks))
 
     return compact
@@ -217,30 +228,39 @@ c3.metric("Fastest Role", strategy.fastest_role)
 c4.metric("Confidence", strategy.confidence)
 
 if strategy.reality_verdict == "Highly Ready":
-    st.success("You already have strong alignment with this role. Focus on polishing projects and portfolio proof.")
+    st.success(
+        "You already have strong alignment with this role. Focus on polishing projects and portfolio proof."
+    )
 elif strategy.reality_verdict == "Feasible":
-    st.success("This target looks realistic within your selected timeframe if you stay consistent.")
+    st.success(
+        "This target looks realistic within your selected timeframe if you stay consistent."
+    )
 elif strategy.reality_verdict == "Stretch":
-    st.warning("This role is possible, but it will require focused effort and closing several important gaps.")
+    st.warning(
+        "This role is possible, but it will require focused effort and closing several important gaps."
+    )
 else:
-    st.error("This goal is unrealistic for the selected timeframe at your current readiness level.")
+    st.error(
+        "This goal is unrealistic for the selected timeframe at your current readiness level."
+    )
 
 if input_mode == "Upload CV" and cv_text:
     st.subheader("📄 CV Overview")
 
     if use_local_llm:
-        cv_overview = generate_cv_overview(
-            cv_text=cv_text,
-            extracted_skills=user_skills,
-            target_role=target_role,
+        st.write_stream(
+            stream_cv_overview(
+                cv_text=cv_text,
+                extracted_skills=user_skills,
+                target_role=target_role,
+            )
         )
-        if cv_overview:
-            st.write(cv_overview)
 
     if extracted_skill_matches:
         st.markdown("**Detected Skills from CV**")
         detected_only = []
         seen = set()
+
         for skill, _ in extracted_skill_matches:
             if skill not in seen:
                 detected_only.append(skill)
@@ -253,6 +273,17 @@ if input_mode == "Upload CV" and cv_text:
         st.text_area("CV text", cv_text[:5000], height=220)
 
 if use_local_llm:
+    st.subheader("🧠 AI Explanation")
+    st.write_stream(
+        stream_roleforge_explanation(
+            target_role=target_role,
+            user_skills=user_skills,
+            readiness_score=strategy.readiness_score,
+            bottlenecks=strategy.bottlenecks,
+            fastest_role=strategy.fastest_role,
+        )
+    )
+else:
     explanation = generate_roleforge_explanation(
         target_role=target_role,
         user_skills=user_skills,

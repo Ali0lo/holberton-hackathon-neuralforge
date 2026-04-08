@@ -25,6 +25,39 @@ def _ollama_generate(prompt: str, timeout: int = 25) -> str:
         return ""
 
 
+def _ollama_stream(prompt: str, timeout: int = 60):
+    """
+    Yield text chunks from Ollama streaming response.
+    """
+    try:
+        with requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": True,
+            },
+            timeout=timeout,
+            stream=True,
+        ) as response:
+            response.raise_for_status()
+
+            for line in response.iter_lines(decode_unicode=True):
+                if not line:
+                    continue
+                try:
+                    data = json.loads(line)
+                    chunk = data.get("response", "")
+                    if chunk:
+                        yield chunk
+                    if data.get("done", False):
+                        break
+                except Exception:
+                    continue
+    except Exception:
+        return
+
+
 def generate_roleforge_explanation(
     target_role: str,
     user_skills: list[str],
@@ -51,6 +84,32 @@ Requirements:
     return _ollama_generate(prompt, timeout=20)
 
 
+def stream_roleforge_explanation(
+    target_role: str,
+    user_skills: list[str],
+    readiness_score: float,
+    bottlenecks: list[tuple[str, float]],
+    fastest_role: str,
+):
+    prompt = f"""
+You are an honest career advisor.
+Write a short explanation for a user.
+
+Target role: {target_role}
+User skills: {", ".join(user_skills)}
+Readiness score: {readiness_score}
+Top bottlenecks: {", ".join([b[0] for b in bottlenecks[:3]])}
+Fastest realistic role: {fastest_role}
+
+Requirements:
+- be honest, direct, and useful
+- max 120 words
+- no hype
+- mention one practical next step
+"""
+    yield from _ollama_stream(prompt, timeout=40)
+
+
 def generate_cv_overview(
     cv_text: str,
     extracted_skills: list[str],
@@ -73,6 +132,30 @@ Requirements:
 - do not invent experience that is not in the CV
 """
     return _ollama_generate(prompt, timeout=25)
+
+
+def stream_cv_overview(
+    cv_text: str,
+    extracted_skills: list[str],
+    target_role: str,
+):
+    prompt = f"""
+You are an honest career assistant.
+Write a short CV overview for a user applying toward {target_role}.
+
+Extracted skills: {", ".join(extracted_skills)}
+CV text:
+{cv_text[:5000]}
+
+Requirements:
+- max 140 words
+- summarize the candidate profile briefly
+- mention 2 strengths
+- mention 1 gap relative to the target role
+- be direct and practical
+- do not invent experience that is not in the CV
+"""
+    yield from _ollama_stream(prompt, timeout=50)
 
 
 def llm_map_user_skills(
@@ -202,10 +285,13 @@ def llm_rerank_courses(
             {
                 "id": idx,
                 "skill": item.get("skill", ""),
-                "title": item.get("course_title", ""),
+                "course_title": item.get("course_title", ""),
                 "provider": item.get("provider", ""),
                 "url": item.get("url", ""),
                 "level": item.get("level", ""),
+                "duration_hours": item.get("duration_hours", 0.0),
+                "price_type": item.get("price_type", "unknown"),
+                "quality_score": item.get("quality_score", 0.0),
             }
         )
 
