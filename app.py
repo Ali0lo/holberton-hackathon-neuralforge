@@ -11,6 +11,7 @@ import plotly.express as px
 
 from roleforge.recommender import load_course_catalog, recommend_courses
 from roleforge.strategy import build_strategy
+from roleforge.cv_parser import extract_text_from_uploaded_file, extract_skills_from_text
 
 
 @st.cache_data
@@ -55,23 +56,72 @@ if not roles:
 
 st.sidebar.header("Input")
 target_role = st.sidebar.selectbox("Target role", roles)
-user_skills_text = st.sidebar.text_area(
-    "Current skills (comma-separated)",
-    placeholder="python, ml, pytorch, pandas",
-    height=140,
+
+input_mode = st.sidebar.radio(
+    "Skill input mode",
+    ["Manual input", "Upload CV"],
 )
+
+user_skills = []
+
+if input_mode == "Manual input":
+    user_skills_text = st.sidebar.text_area(
+        "Current skills (comma-separated)",
+        placeholder="python, ml, pytorch, pandas",
+        height=140,
+    )
+    user_skills = parse_user_skills(user_skills_text)
+
+else:
+    uploaded_file = st.sidebar.file_uploader(
+        "Upload CV",
+        type=["pdf", "docx", "txt"],
+        help="Best results for text-based PDF, DOCX, or TXT resumes.",
+    )
+
+    extra_skills_text = st.sidebar.text_area(
+        "Optional extra skills",
+        placeholder="rag, vector databases",
+        height=100,
+    )
+
+    if uploaded_file is not None:
+        try:
+            cv_text = extract_text_from_uploaded_file(uploaded_file)
+            extracted_skills = extract_skills_from_text(cv_text, role_df)
+            extra_skills = parse_user_skills(extra_skills_text)
+
+            user_skills = sorted(set(extracted_skills + extra_skills))
+
+            st.subheader("📄 CV Extraction")
+            st.write(f"Detected **{len(extracted_skills)}** skills from CV.")
+
+            if extracted_skills:
+                st.write(", ".join(extracted_skills))
+            else:
+                st.warning(
+                    "No recognizable skills were extracted from the CV. "
+                    "Try adding skills manually below or upload a text-based resume."
+                )
+
+            with st.expander("Preview extracted CV text"):
+                st.text_area("CV Text", cv_text[:5000], height=250)
+
+        except Exception as e:
+            st.error(f"Failed to read CV: {e}")
+            st.stop()
+
 hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
 user_estimated_months = st.sidebar.slider("How many months do you think it will take?", 1, 24, 3, 1)
 
 run_simulation = st.sidebar.button("Run simulation", use_container_width=True)
 
 if not run_simulation:
-    st.info("Enter your skills, choose a target role, and run the simulation.")
+    st.info("Choose a role, provide skills manually or upload a CV, then run the simulation.")
     st.stop()
 
-user_skills = parse_user_skills(user_skills_text)
 if not user_skills:
-    st.warning("Please enter at least one skill.")
+    st.warning("Please provide at least one skill or upload a CV with extractable text.")
     st.stop()
 
 try:
