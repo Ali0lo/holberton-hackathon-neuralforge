@@ -75,7 +75,7 @@ def format_role_name(role: str) -> str:
         if lw in special_words:
             formatted.append(special_words[lw])
         else:
-            formatted.append(word.capitalize())
+            formatted.append(word[0].upper() + word[1:].lower() if word else word)
 
     return " ".join(formatted)
 
