@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 
 st.set_page_config(
@@ -39,7 +40,6 @@ def load_role_data(path: str) -> pd.DataFrame:
     df["role"] = df["role"].astype(str).str.strip()
     df["skill"] = df["skill"].astype(str).str.strip()
     df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0.0)
-
     return df
 
 
@@ -113,6 +113,15 @@ allowed_skills = sorted(
     {str(skill).strip() for skill in role_df["skill"].dropna().unique().tolist()}
 )
 
+with st.expander("LLM Debug"):
+    st.write("OPENAI key loaded (env):", bool(os.getenv("OPENAI_API_KEY")))
+    st.write("OPENAI model (env):", os.getenv("OPENAI_MODEL"))
+    try:
+        st.write("OPENAI key in secrets:", "OPENAI_API_KEY" in st.secrets)
+        st.write("OPENAI model in secrets:", st.secrets.get("OPENAI_MODEL", "missing"))
+    except Exception:
+        st.write("Secrets not accessible")
+
 st.sidebar.header("Input")
 target_role = st.sidebar.selectbox("Target role", roles)
 input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
@@ -125,7 +134,7 @@ hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
 user_estimated_months = st.sidebar.slider(
     "How many months do you think it will take?", 1, 24, 3, 1
 )
-use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
+use_llm = st.sidebar.checkbox("Use AI explanation", value=True)
 use_llm_skill_mapping = st.sidebar.checkbox("Use LLM skill mapping", value=False)
 
 st.sidebar.caption("📎 Max CV upload size: 5MB")
@@ -245,7 +254,7 @@ else:
 if input_mode == "Upload CV" and cv_text:
     st.subheader("📄 CV Overview")
 
-    if use_local_llm:
+    if use_llm:
         st.write_stream(
             stream_cv_overview(
                 cv_text=cv_text,
@@ -270,8 +279,8 @@ if input_mode == "Upload CV" and cv_text:
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)
 
-if use_local_llm:
-    st.subheader("🧠 AI Explanation")
+st.subheader("🧠 AI Explanation")
+if use_llm:
     st.write_stream(
         stream_roleforge_explanation(
             target_role=target_role,
@@ -290,7 +299,6 @@ else:
         fastest_role=strategy.fastest_role,
     )
     if explanation:
-        st.subheader("🧠 AI Explanation")
         st.write(explanation)
 
 st.subheader("🧠 Reality Gap")
