@@ -16,7 +16,6 @@ SKILL_ALIASES = {
     "deep_learning": "deep learning",
     "stats": "statistics",
     "stat": "statistics",
-    "sql db": "sql",
     "postgres": "sql",
     "postgresql": "sql",
     "mysql": "sql",
@@ -27,8 +26,8 @@ SKILL_ALIASES = {
     "api": "apis",
     "rest api": "apis",
     "rest apis": "apis",
-    "git/github": "git",
     "github": "git",
+    "git/github": "git",
     "llm": "large language models",
     "llms": "large language models",
     "nlp": "natural language processing",
@@ -59,10 +58,13 @@ class StrategyResult:
 
 def _get_role_df(role_df: pd.DataFrame, target_role: str) -> pd.DataFrame:
     filtered = role_df[
-        role_df["role"].astype(str).str.strip().str.lower() == str(target_role).strip().lower()
+        role_df["role"].astype(str).str.strip().str.lower()
+        == str(target_role).strip().lower()
     ].copy()
+
     if filtered.empty:
         raise ValueError(f"Target role '{target_role}' not found.")
+
     return filtered
 
 
@@ -203,7 +205,7 @@ def _find_fastest_role(role_df: pd.DataFrame, user_skills: List[str]) -> Tuple[s
 def _build_compressed_path(target_role: str, fastest_role: str) -> str:
     if fastest_role.lower() == target_role.lower():
         return target_role
-    return f"{fastest_role} → {target_role}"
+    return f"{fastest_role} -> {target_role}"
 
 
 def _build_roadmap(bottlenecks: List[Tuple[str, float]]) -> Dict[str, List[str]]:

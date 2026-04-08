@@ -154,7 +154,7 @@ st.subheader("📚 Recommended Courses")
 if recommended_courses:
     for course in recommended_courses:
         st.markdown(
-            f"- **{course.skill}** → [{course.course_title}]({course.url})  \n"
+            f"- **{course.skill}** -> [{course.course_title}]({course.url})  \n"
             f"  {course.provider} | {course.level} | {course.duration_hours}h | {course.price_type}"
         )
 else:
@@ -170,4 +170,5 @@ with st.expander("Technical summary"):
     st.write("User skills:", user_skills)
     st.write("Target role:", target_role)
     st.write("Hours/week:", hours_per_week)
+    st.write("Loaded roles:", roles[:50])
     st.write("Strategy:", strategy)

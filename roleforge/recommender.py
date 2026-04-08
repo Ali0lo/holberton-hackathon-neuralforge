@@ -67,7 +67,11 @@ def recommend_courses(
         if matches.empty:
             continue
 
-        matches = matches.sort_values(by=["quality_score", "duration_hours"], ascending=[False, True])
+        matches = matches.sort_values(
+            by=["quality_score", "duration_hours"],
+            ascending=[False, True],
+        )
+
         best = matches.iloc[0]
         title = str(best["course_title"]).strip()
 
