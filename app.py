@@ -57,7 +57,7 @@ st.sidebar.header("Input")
 target_role = st.sidebar.selectbox("Target role", roles)
 user_skills_text = st.sidebar.text_area(
     "Current skills (comma-separated)",
-    placeholder="python, sql, pandas, ml",
+    placeholder="python, ml, pytorch, pandas",
     height=140,
 )
 hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
@@ -170,5 +170,5 @@ with st.expander("Technical summary"):
     st.write("User skills:", user_skills)
     st.write("Target role:", target_role)
     st.write("Hours/week:", hours_per_week)
-    st.write("Loaded roles:", roles[:50])
+    st.write("Loaded roles:", roles)
     st.write("Strategy:", strategy)
