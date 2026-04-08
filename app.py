@@ -11,7 +11,8 @@ import plotly.express as px
 
 from roleforge.recommender import load_course_catalog, recommend_courses
 from roleforge.strategy import build_strategy
-from roleforge.cv_parser import extract_text_from_uploaded_file, extract_skills_from_text
+from roleforge.llm_helper import generate_roleforge_explanation, generate_cv_overview
+from roleforge.cv_parser import extract_text_from_uploaded_file, extract_skills_from_text, extract_skill_matches_from_text
 
 
 @st.cache_data
@@ -56,13 +57,10 @@ if not roles:
 
 st.sidebar.header("Input")
 target_role = st.sidebar.selectbox("Target role", roles)
+input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
 
-input_mode = st.sidebar.radio(
-    "Skill input mode",
-    ["Manual input", "Upload CV"],
-)
-
-user_skills = []
+cv_text = ""
+extracted_skill_matches = []
 
 if input_mode == "Manual input":
     user_skills_text = st.sidebar.text_area(
@@ -71,57 +69,46 @@ if input_mode == "Manual input":
         height=140,
     )
     user_skills = parse_user_skills(user_skills_text)
-
 else:
     uploaded_file = st.sidebar.file_uploader(
         "Upload CV",
         type=["pdf", "docx", "txt"],
-        help="Best results for text-based PDF, DOCX, or TXT resumes.",
+        help="Upload a PDF, DOCX, or TXT CV.",
     )
-
     extra_skills_text = st.sidebar.text_area(
         "Optional extra skills",
         placeholder="rag, vector databases",
         height=100,
     )
+    user_skills = []
 
     if uploaded_file is not None:
         try:
             cv_text = extract_text_from_uploaded_file(uploaded_file)
-            extracted_skills = extract_skills_from_text(cv_text, role_df)
+            extracted_skill_matches = extract_skill_matches_from_text(cv_text, role_df)
+            extracted_skills = [skill for skill, _ in extracted_skill_matches]
             extra_skills = parse_user_skills(extra_skills_text)
-
             user_skills = sorted(set(extracted_skills + extra_skills))
-
-            st.subheader("📄 CV Extraction")
-            st.write(f"Detected **{len(extracted_skills)}** skills from CV.")
-
-            if extracted_skills:
-                st.write(", ".join(extracted_skills))
-            else:
-                st.warning(
-                    "No recognizable skills were extracted from the CV. "
-                    "Try adding skills manually below or upload a text-based resume."
-                )
-
-            with st.expander("Preview extracted CV text"):
-                st.text_area("CV Text", cv_text[:5000], height=250)
-
         except Exception as e:
             st.error(f"Failed to read CV: {e}")
             st.stop()
 
 hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
 user_estimated_months = st.sidebar.slider("How many months do you think it will take?", 1, 24, 3, 1)
+use_live_course_search = st.sidebar.checkbox("Use live course search", value=False)
+use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
 
 run_simulation = st.sidebar.button("Run simulation", use_container_width=True)
 
 if not run_simulation:
-    st.info("Choose a role, provide skills manually or upload a CV, then run the simulation.")
+    st.info("Enter your skills, choose a target role, and run the simulation.")
     st.stop()
 
 if not user_skills:
-    st.warning("Please provide at least one skill or upload a CV with extractable text.")
+    if input_mode == "Upload CV":
+        st.warning("Please upload a CV with extractable text or add some extra skills.")
+    else:
+        st.warning("Please enter at least one skill.")
     st.stop()
 
 try:
@@ -136,7 +123,12 @@ except Exception as e:
     st.stop()
 
 try:
-    recommended_courses = recommend_courses(strategy.bottlenecks, course_df, max_courses=3)
+    recommended_courses = recommend_courses(
+        strategy.bottlenecks,
+        course_df,
+        max_courses=3,
+        use_live_search=use_live_course_search,
+    )
 except Exception:
     recommended_courses = []
 
@@ -145,6 +137,39 @@ c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
 c3.metric("Fastest Role", strategy.fastest_role)
 c4.metric("Confidence", strategy.confidence)
+
+if input_mode == "Upload CV" and cv_text:
+    st.subheader("📄 CV Overview")
+
+    if use_local_llm:
+        cv_overview = generate_cv_overview(
+            cv_text=cv_text,
+            extracted_skills=user_skills,
+            target_role=target_role,
+        )
+        if cv_overview:
+            st.write(cv_overview)
+
+    if extracted_skill_matches:
+        st.markdown("**Detected Skills from CV**")
+        for skill, matched_term in extracted_skill_matches:
+            display_term = matched_term if matched_term.lower() != skill.lower() else skill
+            st.write(f"- {skill} _(matched from: {display_term})_")
+
+    with st.expander("Preview extracted CV text"):
+        st.text_area("CV text", cv_text[:5000], height=220)
+
+if use_local_llm:
+    explanation = generate_roleforge_explanation(
+        target_role=target_role,
+        user_skills=user_skills,
+        readiness_score=strategy.readiness_score,
+        bottlenecks=strategy.bottlenecks,
+        fastest_role=strategy.fastest_role,
+    )
+    if explanation:
+        st.subheader("🧠 AI Explanation")
+        st.write(explanation)
 
 st.subheader("🧠 Reality Gap")
 gap = strategy.estimated_months_to_ready - user_estimated_months
@@ -186,17 +211,28 @@ if strategy.fastest_role.lower() != target_role.lower():
 else:
     st.success("Your target role is already the best current path.")
 
+st.subheader("📈 Learning Curve")
+
+curve_df = pd.DataFrame(strategy.projection_series)
+fig_curve = px.line(
+    curve_df,
+    x="Month",
+    y="Projected readiness",
+    markers=True,
+    title="Projected Readiness Over Time",
+)
+st.plotly_chart(fig_curve, use_container_width=True)
+
 st.subheader("📈 What-if Simulation")
 proj_df = pd.DataFrame(
     [{"Hours per week": h, "Projected readiness": s} for h, s in strategy.what_if_projections.items()]
 ).sort_values("Hours per week")
 
-fig = px.line(
+fig = px.bar(
     proj_df,
     x="Hours per week",
     y="Projected readiness",
-    markers=True,
-    title="Projected Readiness by Weekly Effort",
+    title="3-Month Readiness by Weekly Effort",
 )
 st.plotly_chart(fig, use_container_width=True)
 
@@ -221,4 +257,6 @@ with st.expander("Technical summary"):
     st.write("Target role:", target_role)
     st.write("Hours/week:", hours_per_week)
     st.write("Loaded roles:", roles)
-    st.write("Strategy:", strategy)
+    st.write("Input mode:", input_mode)
+    st.write("CV skill matches:", extracted_skill_matches)
+    st.write("Strategy:", strategy)s

@@ -199,6 +199,7 @@ class StrategyResult:
     compressed_path: str
     what_if_projections: Dict[int, float]
     roadmap: Dict[str, List[str]]
+    projection_series: List[Dict[str, float]]
 
 
 def _get_role_df(role_df: pd.DataFrame, target_role: str) -> pd.DataFrame:
@@ -222,7 +223,6 @@ def _bucket_based_readiness(
     target_df["skill_norm"] = target_df["skill"].apply(normalize_skill)
 
     normalized_user_skills = {normalize_skill(skill) for skill in user_skills}
-
     role_weights = {normalize_skill(row["skill"]): float(row["weight"]) for _, row in target_df.iterrows()}
     role_display = {normalize_skill(row["skill"]): str(row["skill"]) for _, row in target_df.iterrows()}
 
@@ -347,12 +347,28 @@ def _confidence_label(num_user_skills: int, num_role_skills: int) -> str:
     return "Low"
 
 
+def _project_readiness_curve(current_readiness: float, hours_per_week: int, months: int) -> float:
+    effort = max(1, hours_per_week)
+    growth_rate = 0.08 + (effort / 200.0)
+    remaining_gap = max(0.0, 100.0 - current_readiness)
+    progress = remaining_gap * (1 - np.exp(-growth_rate * months))
+    return round(min(100.0, current_readiness + progress), 1)
+
+
 def _what_if_projection(readiness_score: float) -> Dict[int, float]:
     return {
-        5: round(min(100.0, readiness_score + 10.0), 1),
-        10: round(min(100.0, readiness_score + 20.0), 1),
-        15: round(min(100.0, readiness_score + 30.0), 1),
+        5: _project_readiness_curve(readiness_score, 5, 3),
+        10: _project_readiness_curve(readiness_score, 10, 3),
+        15: _project_readiness_curve(readiness_score, 15, 3),
     }
+
+
+def _build_projection_series(current_readiness: float, hours_per_week: int, months: int = 6) -> List[Dict[str, float]]:
+    rows = []
+    for month in range(1, months + 1):
+        projected = _project_readiness_curve(current_readiness, hours_per_week, month)
+        rows.append({"Month": month, "Projected readiness": projected})
+    return rows
 
 
 def _build_compressed_path(target_role: str, fastest_role: str) -> str:
@@ -443,4 +459,5 @@ def build_strategy(
         compressed_path=compressed_path,
         what_if_projections=_what_if_projection(readiness_score),
         roadmap=_build_roadmap(bottlenecks),
+        projection_series=_build_projection_series(readiness_score, hours_per_week, months=6),
     )
