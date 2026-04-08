@@ -72,27 +72,11 @@ def format_role_name(role: str) -> str:
 
     for word in words:
         lw = word.lower()
-
-        # exact special word match
         if lw in special_words:
             formatted.append(special_words[lw])
         else:
-            # keep "machine learning" nice
-            if lw == "learning":
-                formatted.append("Learning")
-            else:
-                formatted.append(word.capitalize())
-
-    return " ".join(formatted)
-
-    words = str(role).split()
-    formatted = []
-    for word in words:
-        lower_word = word.lower()
-        if lower_word in special_map:
-            formatted.append(special_map[lower_word])
-        else:
             formatted.append(word.capitalize())
+
     return " ".join(formatted)
 
 
@@ -387,7 +371,9 @@ with right:
 st.subheader("🔁 Strategy Recommendation")
 if strategy.fastest_role.lower() != target_role.lower():
     st.info(f"Fastest realistic role: **{format_role_name(strategy.fastest_role)}**")
-    st.write(f"**Compressed path:** {format_role_name(strategy.fastest_role)} -> {format_role_name(target_role)}")
+    st.write(
+        f"**Compressed path:** {format_role_name(strategy.fastest_role)} -> {format_role_name(target_role)}"
+    )
 else:
     st.success("Your target role is already the best current path.")
 
