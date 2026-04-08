@@ -394,4 +394,4 @@ with st.expander("Technical summary"):
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
     st.write("LLM skill mapping enabled:", use_llm_skill_mapping)
-    st.write("Strategy:", strategy) 
+    st.write("Strategy:", strategy)
