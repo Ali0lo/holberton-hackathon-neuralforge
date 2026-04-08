@@ -154,7 +154,7 @@ with st.expander("LLM Debug"):
         st.write("Secrets not accessible")
 
 st.sidebar.header("Input")
-target_role_display = st.sidebar.selectbox("Target role", display_roles)
+target_role_display = st.sidebar.selectbox("Target role", display_roles, key="target_role_v2")
 target_role = role_map[target_role_display]
 input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
 
