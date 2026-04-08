@@ -231,7 +231,7 @@ recommended_courses = recommend_courses(
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
-c3.metric("Fastest Role", strategy.fastest_role)
+c3.metric("Fastest Role", strategy.fastest_role.title())
 c4.metric("Confidence", strategy.confidence)
 
 if strategy.reality_verdict == "Highly Ready":
@@ -274,7 +274,7 @@ if input_mode == "Upload CV" and cv_text:
                 seen.add(skill)
 
         for skill in detected_only:
-            st.write(f"- {skill}")
+            st.write(f"- {skill.title()}")
 
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)
@@ -338,10 +338,17 @@ with right:
 
 st.subheader("🔁 Strategy Recommendation")
 if strategy.fastest_role.lower() != target_role.lower():
-    st.info(f"Fastest realistic role: **{strategy.fastest_role}**")
-    st.write(f"**Compressed path:** {strategy.compressed_path}")
+    st.info(f"Fastest realistic role: **{strategy.fastest_role.title()}**")
+    st.write(f"**Compressed path:** {strategy.compressed_path.title()}")
 else:
     st.success("Your target role is already the best current path.")
+
+st.subheader("🧭 Closest Alternative Roles")
+if strategy.alternative_roles:
+    for role, score in strategy.alternative_roles:
+        st.write(f"- **{role.title()}** — similarity score: {score:.1f}%")
+else:
+    st.write("No alternative roles found.")
 
 st.subheader("📈 Learning Curve")
 curve_df = pd.DataFrame(strategy.projection_series)
@@ -395,11 +402,11 @@ for interval, tasks in compact_roadmap:
 
 st.subheader("📄 Export Report")
 pdf_bytes = build_roleforge_report_pdf(
-    target_role=target_role,
-    user_skills=user_skills,
+    target_role=target_role.title(),
+    user_skills=[s.title() for s in user_skills],
     readiness_score=strategy.readiness_score,
     reality_verdict=strategy.reality_verdict,
-    fastest_role=strategy.fastest_role,
+    fastest_role=strategy.fastest_role.title(),
     confidence=strategy.confidence,
     estimated_months_to_ready=strategy.estimated_months_to_ready,
     matched_skills=strategy.matched_skills,
@@ -423,4 +430,5 @@ with st.expander("Technical summary"):
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
     st.write("LLM skill mapping enabled:", use_llm_skill_mapping)
+    st.write("Alternative roles:", strategy.alternative_roles)
     st.write("Strategy:", strategy)

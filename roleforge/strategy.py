@@ -52,6 +52,23 @@ SKILL_ALIASES = {
     "git/github": "git",
     "power bi": "bi tools",
     "tableau": "dashboarding",
+    "cloud computing": "cloud",
+    "data pipelines": "etl",
+    "databases": "sql",
+    "web development": "javascript",
+    "aws": "cloud",
+    "terraform": "cloud",
+    "network security": "security fundamentals",
+    "threat analysis": "incident response",
+    "threat detection": "incident response",
+    "cloud security": "security fundamentals",
+    "firewalls": "security fundamentals",
+    "security architecture": "security fundamentals",
+    "penetration testing": "security fundamentals",
+    "web security": "security fundamentals",
+    "owasp": "security fundamentals",
+    "log analysis": "siem",
+    "spark": "apache spark",
 }
 
 
@@ -125,84 +142,89 @@ def canonicalize_display_skill(skill: str) -> str:
         "data visualization": "Data Visualization",
         "monitoring": "Monitoring",
     }
-    return mapping.get(normalize_skill(skill), skill)
+    return mapping.get(normalize_skill(skill), skill.title())
 
 
 ROLE_BUCKETS = {
-    "AI Engineer": {
+    "ai engineer": {
         "foundation": ["python", "git", "apis"],
-        "core": [
-            "machine learning",
-            "deep learning",
-            "large language models",
-            "natural language processing",
-        ],
+        "core": ["machine learning", "deep learning", "large language models", "natural language processing"],
         "advanced": ["pytorch", "tensorflow", "vector databases", "rag", "docker"],
     },
-    "ML Engineer": {
+    "machine learning engineer": {
         "foundation": ["python", "numpy", "pandas", "sql", "git"],
         "core": ["machine learning", "scikit-learn", "statistics"],
         "advanced": ["deep learning", "pytorch", "tensorflow", "mlops", "docker"],
     },
-    "Deep Learning Engineer": {
-        "foundation": ["python", "numpy", "git"],
-        "core": ["deep learning", "pytorch", "tensorflow"],
-        "advanced": ["computer vision", "natural language processing", "docker"],
-    },
-    "Data Scientist": {
+    "data scientist": {
         "foundation": ["python", "pandas", "numpy", "sql"],
         "core": ["statistics", "machine learning", "data visualization"],
         "advanced": ["scikit-learn", "feature engineering", "experimentation"],
     },
-    "Data Analyst": {
+    "data analyst": {
         "foundation": ["sql", "excel"],
         "core": ["python", "pandas", "data visualization"],
         "advanced": ["statistics", "bi tools", "dashboarding"],
     },
-    "Data Engineer": {
+    "data engineer": {
         "foundation": ["python", "sql", "git"],
         "core": ["etl", "data warehousing", "apache spark"],
         "advanced": ["airflow", "cloud", "docker"],
     },
-    "MLOps Engineer": {
+    "mlops engineer": {
         "foundation": ["python", "git", "apis"],
         "core": ["mlops", "docker", "cloud"],
         "advanced": ["kubernetes", "ci/cd", "monitoring"],
     },
-    "Software Engineer": {
+    "software engineer": {
         "foundation": ["python", "git", "sql"],
         "core": ["data structures", "algorithms", "apis"],
         "advanced": ["docker", "system design", "javascript"],
     },
-    "Frontend Developer": {
-        "foundation": ["html", "css", "javascript"],
-        "core": ["react", "apis"],
-        "advanced": ["git", "ui/ux"],
-    },
-    "Backend Developer": {
+    "backend engineer": {
         "foundation": ["python", "sql", "git"],
         "core": ["apis", "system design"],
         "advanced": ["docker", "java", "node.js"],
     },
-    "Cybersecurity Engineer": {
+    "frontend engineer": {
+        "foundation": ["html", "css", "javascript"],
+        "core": ["react", "apis"],
+        "advanced": ["git", "ui/ux"],
+    },
+    "full stack engineer": {
+        "foundation": ["python", "sql", "javascript"],
+        "core": ["react", "apis", "git"],
+        "advanced": ["docker", "system design"],
+    },
+    "devops engineer": {
+        "foundation": ["linux", "git", "cloud"],
+        "core": ["docker", "kubernetes", "ci/cd"],
+        "advanced": ["monitoring", "python"],
+    },
+    "cloud engineer": {
+        "foundation": ["cloud", "linux", "networking"],
+        "core": ["cloud", "security fundamentals", "git"],
+        "advanced": ["docker", "python"],
+    },
+    "cybersecurity analyst": {
         "foundation": ["linux", "networking"],
         "core": ["security fundamentals", "incident response", "siem"],
         "advanced": ["python", "cloud", "git"],
     },
-    "QA Engineer": {
-        "foundation": ["testing", "git"],
-        "core": ["automation testing", "selenium", "api testing"],
-        "advanced": ["python", "ci/cd"],
+    "soc analyst": {
+        "foundation": ["linux", "siem"],
+        "core": ["incident response", "security fundamentals"],
+        "advanced": ["networking", "git"],
     },
-    "Systems Analyst": {
-        "foundation": ["business analysis", "requirements gathering"],
-        "core": ["process modeling", "documentation"],
-        "advanced": ["stakeholder communication", "sql"],
+    "cybersecurity engineer": {
+        "foundation": ["linux", "networking"],
+        "core": ["security fundamentals", "cloud", "incident response"],
+        "advanced": ["python", "git", "siem"],
     },
-    "AI Research Scientist": {
-        "foundation": ["python", "mathematics"],
-        "core": ["machine learning", "deep learning", "research"],
-        "advanced": ["pytorch", "experimentation", "large language models"],
+    "penetration tester": {
+        "foundation": ["linux", "python"],
+        "core": ["security fundamentals"],
+        "advanced": ["networking", "git"],
     },
 }
 
@@ -220,6 +242,7 @@ class StrategyResult:
     what_if_projections: Dict[int, float]
     roadmap: Dict[str, List[str]]
     projection_series: List[Dict[str, float]]
+    alternative_roles: List[Tuple[str, float]]
 
 
 def _get_role_df(role_df: pd.DataFrame, target_role: str) -> pd.DataFrame:
@@ -252,8 +275,10 @@ def _bucket_based_readiness(
         for _, row in target_df.iterrows()
     }
 
-    if target_role in ROLE_BUCKETS:
-        buckets = ROLE_BUCKETS[target_role]
+    target_role_norm = str(target_role).strip().lower()
+
+    if target_role_norm in ROLE_BUCKETS:
+        buckets = ROLE_BUCKETS[target_role_norm]
         bucket_weights = {"foundation": 0.35, "core": 0.45, "advanced": 0.20}
         score = 0.0
 
@@ -266,13 +291,9 @@ def _bucket_based_readiness(
     else:
         total_weight = float(target_df["weight"].sum())
         matched_weight = float(
-            target_df[target_df["skill_norm"].isin(normalized_user_skills)][
-                "weight"
-            ].sum()
+            target_df[target_df["skill_norm"].isin(normalized_user_skills)]["weight"].sum()
         )
-        readiness_score = (
-            0.0 if total_weight <= 0 else (matched_weight / total_weight) * 100.0
-        )
+        readiness_score = 0.0 if total_weight <= 0 else (matched_weight / total_weight) * 100.0
 
     matched_norm = [s for s in role_weights.keys() if s in normalized_user_skills]
     matched_skills = [
@@ -284,9 +305,7 @@ def _bucket_based_readiness(
         if skill_norm not in normalized_user_skills:
             missing.append(
                 (
-                    canonicalize_display_skill(
-                        role_display.get(skill_norm, skill_norm)
-                    ),
+                    canonicalize_display_skill(role_display.get(skill_norm, skill_norm)),
                     weight,
                 )
             )
@@ -350,6 +369,24 @@ def _find_fastest_role(role_df: pd.DataFrame, user_skills: List[str]) -> Tuple[s
         raise ValueError("Could not determine fastest role.")
 
     return best_role, round(best_score, 1)
+
+
+def _find_top_alternative_roles(
+    role_df: pd.DataFrame,
+    user_skills: List[str],
+    top_k: int = 4,
+) -> List[Tuple[str, float]]:
+    skill_index = _build_skill_space(role_df)
+    user_vec = _build_user_vector(user_skills, skill_index)
+
+    scored_roles = []
+    for role in sorted(role_df["role"].astype(str).str.strip().unique().tolist()):
+        role_vec = _build_role_vector(role_df, role, skill_index)
+        sim = _cosine_similarity(user_vec, role_vec) * 100.0
+        scored_roles.append((role, round(sim, 1)))
+
+    scored_roles.sort(key=lambda x: x[1], reverse=True)
+    return scored_roles[:top_k]
 
 
 def _estimate_months_to_ready(readiness_score: float, hours_per_week: int) -> int:
@@ -438,35 +475,35 @@ def _build_roadmap(bottlenecks: List[Tuple[str, float]]) -> Dict[str, List[str]]
     top_skills = [skill for skill, _ in bottlenecks[:3]]
 
     roadmap = {
-        "Week 1": [],
-        "Week 2": [],
-        "Week 3": [],
-        "Week 4": [],
+        "Phase 1": [],
+        "Phase 2": [],
+        "Phase 3": [],
+        "Phase 4": [],
     }
 
     if top_skills:
-        roadmap["Week 1"] += [
+        roadmap["Phase 1"] += [
             f"Focus on {top_skills[0]}",
             f"Complete one practical exercise in {top_skills[0]}",
         ]
     else:
-        roadmap["Week 1"].append("Review fundamentals")
+        roadmap["Phase 1"].append("Review fundamentals")
 
     if len(top_skills) >= 2:
-        roadmap["Week 2"] += [
+        roadmap["Phase 2"] += [
             f"Focus on {top_skills[1]}",
             f"Build one mini project using {top_skills[1]}",
         ]
     else:
-        roadmap["Week 2"].append("Strengthen current skills")
+        roadmap["Phase 2"].append("Strengthen current skills")
 
     if len(top_skills) >= 3:
-        roadmap["Week 3"].append(f"Focus on {top_skills[2]}")
+        roadmap["Phase 3"].append(f"Focus on {top_skills[2]}")
     else:
-        roadmap["Week 3"].append("Integrate two learned skills together")
+        roadmap["Phase 3"].append("Integrate two learned skills together")
 
-    roadmap["Week 3"].append("Start a portfolio-ready project")
-    roadmap["Week 4"] += [
+    roadmap["Phase 3"].append("Start a portfolio-ready project")
+    roadmap["Phase 4"] += [
         "Finish the project",
         "Polish GitHub README",
         "Summarize remaining gaps",
@@ -501,12 +538,13 @@ def build_strategy(
 
     estimated_months = _estimate_months_to_ready(readiness_score, hours_per_week)
     verdict = _reality_verdict(
-    readiness_score=readiness_score,
-    estimated_months=estimated_months,
-    matched_skills_count=len(matched_skills),
-    bottlenecks_count=len(bottlenecks),
-)
+        readiness_score=readiness_score,
+        estimated_months=estimated_months,
+        matched_skills_count=len(matched_skills),
+        bottlenecks_count=len(bottlenecks),
+    )
     fastest_role, _ = _find_fastest_role(role_df, user_skills)
+    alternative_roles = _find_top_alternative_roles(role_df, user_skills, top_k=4)
     compressed_path = _build_compressed_path(target_role, fastest_role)
 
     target_skill_count = len(_get_role_df(role_df, target_role))
@@ -526,4 +564,5 @@ def build_strategy(
         projection_series=_build_projection_series(
             readiness_score, hours_per_week, months=6
         ),
+        alternative_roles=alternative_roles,
     )
