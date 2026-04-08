@@ -124,7 +124,6 @@ hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
 user_estimated_months = st.sidebar.slider(
     "How many months do you think it will take?", 1, 24, 3, 1
 )
-use_live_course_search = st.sidebar.checkbox("Use live course search", value=False)
 use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
 use_llm_skill_mapping = st.sidebar.checkbox("Use LLM skill mapping", value=False)
 
@@ -214,8 +213,8 @@ try:
         strategy.bottlenecks,
         course_df,
         max_courses=3,
-        use_live_search=use_live_course_search,
-        use_llm_rerank=use_llm_skill_mapping,
+        use_live_search=False,
+        use_llm_rerank=False,
         target_role=target_role,
     )
 except Exception:
@@ -366,7 +365,7 @@ if strategy.bottlenecks:
 else:
     st.success("No major skill gaps detected.")
 
-st.subheader("📚 Recommended Courses")
+st.subheader("📚 Recommended Courses (Curated)")
 if recommended_courses:
     for course in recommended_courses:
         st.markdown(
@@ -395,4 +394,4 @@ with st.expander("Technical summary"):
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
     st.write("LLM skill mapping enabled:", use_llm_skill_mapping)
-    st.write("Strategy:", strategy)
+    st.write("Strategy:", strategy) 
