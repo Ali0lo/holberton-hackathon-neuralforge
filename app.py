@@ -268,21 +268,24 @@ fig_curve = px.line(
 )
 st.plotly_chart(fig_curve, use_container_width=True)
 
-st.subheader("📈 What-if Simulation")
-proj_df = pd.DataFrame(
-    [
-        {"Hours per week": h, "Projected readiness": s}
-        for h, s in strategy.what_if_projections.items()
-    ]
-).sort_values("Hours per week")
+st.subheader("📊 Skill Gap Visualization")
 
-fig = px.bar(
-    proj_df,
-    x="Hours per week",
-    y="Projected readiness",
-    title="3-Month Readiness by Weekly Effort",
-)
-st.plotly_chart(fig, use_container_width=True)
+if strategy.bottlenecks:
+    bottleneck_df = pd.DataFrame(
+        strategy.bottlenecks[:8],
+        columns=["Skill", "Weight"],
+    ).sort_values("Weight", ascending=True)
+
+    fig_gap = px.bar(
+        bottleneck_df,
+        x="Weight",
+        y="Skill",
+        orientation="h",
+        title="Top Missing Skills by Importance",
+    )
+    st.plotly_chart(fig_gap, use_container_width=True)
+else:
+    st.success("No major skill gaps detected.")
 
 st.subheader("📚 Recommended Courses")
 if recommended_courses:
