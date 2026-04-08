@@ -1,0 +1,48 @@
+role,skill,weight
+ML Engineer,Python,0.18
+ML Engineer,Machine Learning,0.18
+ML Engineer,SQL,0.10
+ML Engineer,Deep Learning,0.14
+ML Engineer,MLOps,0.14
+ML Engineer,Data Pipelines,0.10
+ML Engineer,Docker,0.08
+ML Engineer,APIs,0.08
+Data Scientist,Python,0.18
+Data Scientist,Statistics,0.17
+Data Scientist,Machine Learning,0.18
+Data Scientist,SQL,0.12
+Data Scientist,Pandas,0.10
+Data Scientist,Data Visualization,0.10
+Data Scientist,Experimentation,0.08
+Data Scientist,Storytelling,0.07
+AI Engineer,Python,0.18
+AI Engineer,LLMs,0.18
+AI Engineer,Prompt Engineering,0.10
+AI Engineer,RAG,0.16
+AI Engineer,APIs,0.10
+AI Engineer,Evaluation,0.10
+AI Engineer,Vector Databases,0.08
+AI Engineer,Docker,0.10
+Data Analyst,SQL,0.22
+Data Analyst,Excel,0.16
+Data Analyst,Python,0.10
+Data Analyst,Statistics,0.12
+Data Analyst,Dashboards,0.15
+Data Analyst,Data Cleaning,0.13
+Data Analyst,Data Visualization,0.12
+MLOps Engineer,Python,0.12
+MLOps Engineer,Docker,0.16
+MLOps Engineer,Kubernetes,0.12
+MLOps Engineer,CI/CD,0.12
+MLOps Engineer,Cloud,0.14
+MLOps Engineer,MLOps,0.16
+MLOps Engineer,Monitoring,0.10
+MLOps Engineer,Data Pipelines,0.08
+Backend Engineer,Python,0.16
+Backend Engineer,APIs,0.18
+Backend Engineer,SQL,0.16
+Backend Engineer,System Design,0.14
+Backend Engineer,Docker,0.10
+Backend Engineer,Testing,0.10
+Backend Engineer,Git,0.08
+Backend Engineer,Cloud,0.08
