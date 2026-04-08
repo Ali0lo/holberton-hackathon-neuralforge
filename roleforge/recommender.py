@@ -1,11 +1,12 @@
-from dataclasses import dataclass
-from typing import List, Sequence, Tuple, Union, Optional
+from dataclasses import dataclass, asdict
+from typing import List, Sequence, Tuple, Union
 import os
 
 import pandas as pd
 import requests
 
 from roleforge.strategy import normalize_skill
+from roleforge.llm_helper import llm_rerank_courses
 
 
 @dataclass
@@ -72,15 +73,11 @@ def _extract_skill_name(item: Union[str, Tuple, List]) -> str:
 
 
 def _search_courses_brave(skill: str, level: str = "beginner") -> List[CourseRecommendation]:
-    """
-    Optional live search using Brave Search API.
-    Requires BRAVE_SEARCH_API_KEY in environment.
-    """
     api_key = os.getenv("BRAVE_SEARCH_API_KEY")
     if not api_key:
         return []
 
-    query = f"best {level} {skill} course site:{' OR site:'.join(TRUSTED_DOMAINS[:6])}"
+    query = f"best {level} {skill} course"
 
     try:
         response = requests.get(
@@ -91,7 +88,7 @@ def _search_courses_brave(skill: str, level: str = "beginner") -> List[CourseRec
             },
             params={
                 "q": query,
-                "count": 5,
+                "count": 8,
             },
             timeout=12,
         )
@@ -107,6 +104,7 @@ def _search_courses_brave(skill: str, level: str = "beginner") -> List[CourseRec
         url = str(item.get("url", "")).strip()
         title = str(item.get("title", "")).strip()
         provider = url.split("/")[2] if "://" in url else "Web"
+
         if not url or not title:
             continue
 
@@ -134,56 +132,78 @@ def recommend_courses(
     course_df: pd.DataFrame,
     max_courses: int = 3,
     use_live_search: bool = False,
+    use_llm_rerank: bool = False,
+    target_role: str = "",
 ) -> List[CourseRecommendation]:
     recommendations: List[CourseRecommendation] = []
     used_titles = set()
+
+    live_candidates: List[CourseRecommendation] = []
 
     for item in bottlenecks:
         skill = _extract_skill_name(item)
         skill_norm = normalize_skill(skill)
 
-        # optional live search first
         if use_live_search:
             live_results = _search_courses_brave(skill)
-            for rec in live_results:
-                if rec.course_title not in used_titles:
-                    used_titles.add(rec.course_title)
-                    recommendations.append(rec)
-                    break
+            live_candidates.extend(live_results)
 
-            if len(recommendations) >= max_courses:
-                break
-
-        # fallback to CSV
         matches = course_df[course_df["skill_norm"] == skill_norm].copy()
-        if matches.empty:
-            continue
-
-        matches = matches.sort_values(
-            by=["quality_score", "duration_hours"],
-            ascending=[False, True],
-        )
-
-        best = matches.iloc[0]
-        title = str(best["course_title"]).strip()
-
-        if title in used_titles:
-            continue
-
-        used_titles.add(title)
-        recommendations.append(
-            CourseRecommendation(
-                skill=str(best["skill"]).strip(),
-                course_title=title,
-                provider=str(best["provider"]).strip(),
-                url=str(best["url"]).strip(),
-                level=str(best["level"]).strip(),
-                duration_hours=float(best["duration_hours"]),
-                price_type=str(best["price_type"]).strip(),
-                quality_score=float(best["quality_score"]),
+        if not matches.empty:
+            matches = matches.sort_values(
+                by=["quality_score", "duration_hours"],
+                ascending=[False, True],
             )
-        )
 
+            best = matches.iloc[0]
+            live_candidates.append(
+                CourseRecommendation(
+                    skill=str(best["skill"]).strip(),
+                    course_title=str(best["course_title"]).strip(),
+                    provider=str(best["provider"]).strip(),
+                    url=str(best["url"]).strip(),
+                    level=str(best["level"]).strip(),
+                    duration_hours=float(best["duration_hours"]),
+                    price_type=str(best["price_type"]).strip(),
+                    quality_score=float(best["quality_score"]),
+                )
+            )
+
+    # dedupe before rerank
+    deduped = []
+    seen_urls = set()
+    for rec in live_candidates:
+        if rec.url not in seen_urls:
+            deduped.append(rec)
+            seen_urls.add(rec.url)
+
+    if use_llm_rerank and deduped and target_role:
+        reranked_dicts = llm_rerank_courses(
+            target_role=target_role,
+            bottlenecks=list(bottlenecks),
+            course_candidates=[asdict(r) for r in deduped],
+        )
+        reranked = []
+        for item in reranked_dicts:
+            reranked.append(
+                CourseRecommendation(
+                    skill=item.get("skill", ""),
+                    course_title=item.get("course_title", ""),
+                    provider=item.get("provider", ""),
+                    url=item.get("url", ""),
+                    level=item.get("level", ""),
+                    duration_hours=float(item.get("duration_hours", 0.0)),
+                    price_type=item.get("price_type", "unknown"),
+                    quality_score=float(item.get("quality_score", 0.0)),
+                )
+            )
+        deduped = reranked
+
+    for rec in deduped:
+        if rec.course_title in used_titles:
+            continue
+        used_titles.add(rec.course_title)
+        recommendations.append(rec)
         if len(recommendations) >= max_courses:
             break
 

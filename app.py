@@ -11,10 +11,15 @@ import plotly.express as px
 
 from roleforge.recommender import load_course_catalog, recommend_courses
 from roleforge.strategy import build_strategy
-from roleforge.llm_helper import generate_roleforge_explanation, generate_cv_overview
+from roleforge.llm_helper import (
+    generate_roleforge_explanation,
+    generate_cv_overview,
+    llm_map_user_skills,
+)
 from roleforge.cv_parser import (
     extract_text_from_uploaded_file,
     extract_skill_matches_from_text,
+    extract_skills_from_text,
 )
 
 
@@ -46,10 +51,6 @@ def parse_user_skills(raw_text: str) -> list[str]:
 
 
 def build_compact_roadmap(base_roadmap: dict, total_weeks: int) -> list[tuple[str, list[str]]]:
-    """
-    Expands the 4-phase roadmap into N weeks, then compresses consecutive
-    identical phases into intervals like 'Week 1-4'.
-    """
     if not base_roadmap:
         return []
 
@@ -96,6 +97,10 @@ if not roles:
     st.error("No roles found in data/role_skill_weights.csv")
     st.stop()
 
+allowed_skills = sorted(
+    {str(skill).strip() for skill in role_df["skill"].dropna().unique().tolist()}
+)
+
 st.sidebar.header("Input")
 target_role = st.sidebar.selectbox("Target role", roles)
 input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
@@ -104,13 +109,31 @@ cv_text = ""
 extracted_skill_matches = []
 user_skills = []
 
+hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
+user_estimated_months = st.sidebar.slider(
+    "How many months do you think it will take?", 1, 24, 3, 1
+)
+use_live_course_search = st.sidebar.checkbox("Use live course search", value=False)
+use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
+use_llm_skill_mapping = st.sidebar.checkbox("Use LLM skill mapping", value=False)
+
 if input_mode == "Manual input":
     user_skills_text = st.sidebar.text_area(
         "Current skills (comma-separated)",
-        placeholder="python, ml, pytorch, pandas",
+        placeholder="python, ai, supervised learning, transformers, pandas",
         height=140,
     )
-    user_skills = parse_user_skills(user_skills_text)
+    raw_user_skills = parse_user_skills(user_skills_text)
+
+    if use_llm_skill_mapping and raw_user_skills:
+        llm_skills = llm_map_user_skills(
+            raw_skills=raw_user_skills,
+            target_role=target_role,
+            allowed_skills=allowed_skills,
+        )
+        user_skills = sorted(set(raw_user_skills + llm_skills))
+    else:
+        user_skills = raw_user_skills
 
 else:
     uploaded_file = st.sidebar.file_uploader(
@@ -128,19 +151,28 @@ else:
         try:
             cv_text = extract_text_from_uploaded_file(uploaded_file)
             extracted_skill_matches = extract_skill_matches_from_text(cv_text, role_df)
-            extracted_skills = [skill for skill, _ in extracted_skill_matches]
+
+            extracted_skills = extract_skills_from_text(
+                cv_text,
+                role_df,
+                target_role=target_role,
+                use_llm=use_llm_skill_mapping,
+            )
+
             extra_skills = parse_user_skills(extra_skills_text)
+
+            if use_llm_skill_mapping and extra_skills:
+                extra_llm = llm_map_user_skills(
+                    raw_skills=extra_skills,
+                    target_role=target_role,
+                    allowed_skills=allowed_skills,
+                )
+                extra_skills = sorted(set(extra_skills + extra_llm))
+
             user_skills = sorted(set(extracted_skills + extra_skills))
         except Exception as e:
             st.error(f"Failed to read CV: {e}")
             st.stop()
-
-hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
-user_estimated_months = st.sidebar.slider(
-    "How many months do you think it will take?", 1, 24, 3, 1
-)
-use_live_course_search = st.sidebar.checkbox("Use live course search", value=False)
-use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
 
 run_simulation = st.sidebar.button("Run simulation", use_container_width=True)
 
@@ -172,6 +204,8 @@ try:
         course_df,
         max_courses=3,
         use_live_search=use_live_course_search,
+        use_llm_rerank=use_llm_skill_mapping,
+        target_role=target_role,
     )
 except Exception:
     recommended_courses = []
@@ -181,6 +215,7 @@ c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
 c3.metric("Fastest Role", strategy.fastest_role)
 c4.metric("Confidence", strategy.confidence)
+
 if strategy.reality_verdict == "Highly Ready":
     st.success("You already have strong alignment with this role. Focus on polishing projects and portfolio proof.")
 elif strategy.reality_verdict == "Feasible":
@@ -206,14 +241,13 @@ if input_mode == "Upload CV" and cv_text:
         st.markdown("**Detected Skills from CV**")
         detected_only = []
         seen = set()
+        for skill, _ in extracted_skill_matches:
+            if skill not in seen:
+                detected_only.append(skill)
+                seen.add(skill)
 
-    for skill, _ in extracted_skill_matches:
-        if skill not in seen:
-            detected_only.append(skill)
-            seen.add(skill)
-
-    for skill in detected_only:
-        st.write(f"- {skill}")      
+        for skill in detected_only:
+            st.write(f"- {skill}")
 
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)
@@ -284,7 +318,6 @@ fig_curve = px.line(
 st.plotly_chart(fig_curve, use_container_width=True)
 
 st.subheader("📊 Skill Gap Visualization")
-
 if strategy.bottlenecks:
     bottleneck_df = pd.DataFrame(
         strategy.bottlenecks[:8],
@@ -313,7 +346,6 @@ else:
     st.write("No course recommendations found.")
 
 st.subheader("🗓️ Roadmap")
-
 total_weeks = user_estimated_months * 4
 compact_roadmap = build_compact_roadmap(strategy.roadmap, total_weeks)
 
@@ -331,4 +363,5 @@ with st.expander("Technical summary"):
     st.write("Loaded roles:", roles)
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
+    st.write("LLM skill mapping enabled:", use_llm_skill_mapping)
     st.write("Strategy:", strategy)

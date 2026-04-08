@@ -1,9 +1,28 @@
+import json
 import os
 import requests
 
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+
+
+def _ollama_generate(prompt: str, timeout: int = 25) -> str:
+    try:
+        response = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+            },
+            timeout=timeout,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data.get("response", "").strip()
+    except Exception:
+        return ""
 
 
 def generate_roleforge_explanation(
@@ -29,22 +48,7 @@ Requirements:
 - no hype
 - mention one practical next step
 """
-
-    try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False,
-            },
-            timeout=20,
-        )
-        response.raise_for_status()
-        data = response.json()
-        return data.get("response", "").strip()
-    except Exception:
-        return ""
+    return _ollama_generate(prompt, timeout=20)
 
 
 def generate_cv_overview(
@@ -68,19 +72,179 @@ Requirements:
 - be direct and practical
 - do not invent experience that is not in the CV
 """
+    return _ollama_generate(prompt, timeout=25)
+
+
+def llm_map_user_skills(
+    raw_skills: list[str],
+    target_role: str,
+    allowed_skills: list[str],
+) -> list[str]:
+    """
+    Map noisy/raw user skills into the allowed canonical skill vocabulary.
+    Example:
+      ai -> artificial intelligence / machine learning / large language models
+      supervised learning -> machine learning
+    """
+    if not raw_skills or not allowed_skills:
+        return []
+
+    prompt = f"""
+You are a skill normalizer for a career simulator.
+
+Target role: {target_role}
+
+Raw user skills:
+{json.dumps(raw_skills, ensure_ascii=False)}
+
+Allowed canonical skills:
+{json.dumps(allowed_skills, ensure_ascii=False)}
+
+Task:
+Return ONLY a JSON array of canonical skills from the allowed list that best match the raw user skills.
+Rules:
+- only use items from the allowed canonical skills list
+- map synonyms when appropriate
+- include skills only if they are genuinely supported by the raw input
+- do not invent unrelated skills
+- output JSON only
+"""
+
+    text = _ollama_generate(prompt, timeout=25)
+    if not text:
+        return []
 
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False,
-            },
-            timeout=25,
-        )
-        response.raise_for_status()
-        data = response.json()
-        return data.get("response", "").strip()
+        parsed = json.loads(text)
+        if isinstance(parsed, list):
+            allowed_lower = {s.lower(): s for s in allowed_skills}
+            cleaned = []
+            seen = set()
+            for item in parsed:
+                key = str(item).strip().lower()
+                if key in allowed_lower and key not in seen:
+                    cleaned.append(allowed_lower[key])
+                    seen.add(key)
+            return cleaned
     except Exception:
-        return ""
+        return []
+
+    return []
+
+
+def llm_extract_cv_skills(
+    cv_text: str,
+    target_role: str,
+    allowed_skills: list[str],
+) -> list[str]:
+    """
+    Extract canonical skills from CV text, restricted to the allowed vocabulary.
+    """
+    if not cv_text or not allowed_skills:
+        return []
+
+    prompt = f"""
+You are a resume skill extractor for a career simulator.
+
+Target role: {target_role}
+
+Allowed canonical skills:
+{json.dumps(allowed_skills, ensure_ascii=False)}
+
+CV text:
+{cv_text[:7000]}
+
+Task:
+Return ONLY a JSON array of skills from the allowed canonical skills list that are clearly supported by the CV text.
+Rules:
+- only use items from the allowed canonical skills list
+- do not infer skills without evidence
+- do not output anything except JSON
+"""
+
+    text = _ollama_generate(prompt, timeout=30)
+    if not text:
+        return []
+
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, list):
+            allowed_lower = {s.lower(): s for s in allowed_skills}
+            cleaned = []
+            seen = set()
+            for item in parsed:
+                key = str(item).strip().lower()
+                if key in allowed_lower and key not in seen:
+                    cleaned.append(allowed_lower[key])
+                    seen.add(key)
+            return cleaned
+    except Exception:
+        return []
+
+    return []
+
+
+def llm_rerank_courses(
+    target_role: str,
+    bottlenecks: list[tuple[str, float]],
+    course_candidates: list[dict],
+) -> list[dict]:
+    """
+    Rerank fetched course candidates for better relevance.
+    Returns reordered list of the SAME items only.
+    """
+    if not course_candidates:
+        return []
+
+    simplified = []
+    for idx, item in enumerate(course_candidates):
+        simplified.append(
+            {
+                "id": idx,
+                "skill": item.get("skill", ""),
+                "title": item.get("course_title", ""),
+                "provider": item.get("provider", ""),
+                "url": item.get("url", ""),
+                "level": item.get("level", ""),
+            }
+        )
+
+    prompt = f"""
+You are ranking courses for a user.
+
+Target role: {target_role}
+Top bottlenecks: {", ".join([b[0] for b in bottlenecks[:5]])}
+
+Candidates:
+{json.dumps(simplified, ensure_ascii=False)}
+
+Task:
+Return ONLY a JSON array of candidate ids in best-to-worst order.
+Rules:
+- prioritize relevance to bottlenecks and target role
+- prefer practical, reputable, beginner/intermediate-friendly content
+- output only JSON
+"""
+
+    text = _ollama_generate(prompt, timeout=25)
+    if not text:
+        return course_candidates
+
+    try:
+        ranked_ids = json.loads(text)
+        if isinstance(ranked_ids, list):
+            by_id = {i: item for i, item in enumerate(course_candidates)}
+            reranked = []
+            seen = set()
+            for rid in ranked_ids:
+                if isinstance(rid, int) and rid in by_id and rid not in seen:
+                    reranked.append(by_id[rid])
+                    seen.add(rid)
+            for i, item in enumerate(course_candidates):
+                if i not in seen:
+                    reranked.append(item)
+            return reranked
+    except Exception:
+        return course_candidates
+
+    return course_candidates

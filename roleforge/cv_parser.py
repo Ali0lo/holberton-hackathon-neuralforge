@@ -6,6 +6,8 @@ import pandas as pd
 from PyPDF2 import PdfReader
 import docx
 
+from roleforge.llm_helper import llm_extract_cv_skills
+
 
 def _normalize_text(text: str) -> str:
     text = str(text).lower()
@@ -53,32 +55,17 @@ def build_skill_aliases() -> dict:
     return {
         "python": ["python", "py", "python3"],
         "machine learning": [
-            "machine learning",
-            "ml",
-            "supervised learning",
-            "unsupervised learning",
-            "reinforcement learning",
-            "classical machine learning",
-            "predictive modeling",
-            "model training",
-            "model evaluation",
+            "machine learning", "ml", "supervised learning", "unsupervised learning",
+            "reinforcement learning", "classical machine learning", "predictive modeling",
+            "model training", "model evaluation"
         ],
         "artificial intelligence": ["artificial intelligence", "ai"],
         "deep learning": [
-            "deep learning",
-            "dl",
-            "neural networks",
-            "neural network",
-            "cnn",
-            "rnn",
+            "deep learning", "dl", "neural networks", "neural network", "cnn", "rnn"
         ],
         "large language models": [
-            "large language models",
-            "llm",
-            "llms",
-            "transformers",
-            "transformer models",
-            "prompt engineering",
+            "large language models", "llm", "llms", "transformers", "transformer models",
+            "prompt engineering"
         ],
         "natural language processing": ["natural language processing", "nlp"],
         "computer vision": ["computer vision", "cv"],
@@ -134,6 +121,7 @@ def build_skill_aliases() -> dict:
         "system design": ["system design"],
         "feature engineering": ["feature engineering"],
         "data visualization": ["data visualization", "matplotlib", "seaborn", "plotly"],
+        "monitoring": ["monitoring"],
     }
 
 
@@ -164,6 +152,24 @@ def extract_skill_matches_from_text(text: str, role_df: pd.DataFrame) -> List[Tu
     return sorted(found, key=lambda x: x[0])
 
 
-def extract_skills_from_text(text: str, role_df: pd.DataFrame) -> List[str]:
+def extract_skills_from_text(
+    text: str,
+    role_df: pd.DataFrame,
+    target_role: str = "",
+    use_llm: bool = False,
+) -> List[str]:
     matches = extract_skill_matches_from_text(text, role_df)
-    return sorted({skill for skill, _ in matches})
+    regex_skills = sorted({skill for skill, _ in matches})
+
+    if use_llm:
+        allowed_skills = sorted(
+            {str(skill).strip() for skill in role_df["skill"].dropna().unique().tolist()}
+        )
+        llm_skills = llm_extract_cv_skills(
+            cv_text=text,
+            target_role=target_role,
+            allowed_skills=allowed_skills,
+        )
+        return sorted(set(regex_skills + llm_skills))
+
+    return regex_skills
