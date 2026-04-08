@@ -25,6 +25,7 @@ from roleforge.cv_parser import (
 )
 from roleforge.report_export import build_roleforge_report_pdf
 from roleforge.project_generator import generate_project_recommendation
+from roleforge.resume_analyzer import analyze_resume_gaps
 
 
 @st.cache_data
@@ -275,11 +276,23 @@ project_recommendation = generate_project_recommendation(
     bottlenecks=strategy.bottlenecks,
 )
 
+resume_gap_report = analyze_resume_gaps(
+    target_role=target_role,
+    matched_skills=strategy.matched_skills,
+    bottlenecks=strategy.bottlenecks,
+)
+
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
 c3.metric("Fastest Role", format_role_name(strategy.fastest_role))
 c4.metric("Confidence", strategy.confidence)
+
+if strategy.fastest_role.lower() != target_role.lower():
+    st.info(
+        f"Best role for you right now: **{format_role_name(strategy.fastest_role)}**. "
+        f"That path looks more realistic than **{format_role_name(target_role)}** at your current skill level."
+    )
 
 if strategy.reality_verdict == "Highly Ready":
     st.success(
@@ -394,6 +407,15 @@ with right:
     else:
         st.write("No bottlenecks detected.")
 
+st.subheader("📝 Resume Gap Fixer")
+st.markdown("**Missing keywords to strengthen in your CV / portfolio**")
+for keyword in resume_gap_report["missing_keywords"]:
+    st.write(f"- {keyword}")
+
+st.markdown("**Suggested bullet point themes**")
+for bullet in resume_gap_report["bullet_point_ideas"]:
+    st.write(f"- {bullet}")
+
 st.subheader("🔁 Strategy Recommendation")
 if strategy.fastest_role.lower() != target_role.lower():
     st.info(f"Fastest realistic role: **{format_role_name(strategy.fastest_role)}**")
@@ -432,6 +454,21 @@ fig_curve = px.line(
     title="Projected Readiness Over Time",
 )
 st.plotly_chart(fig_curve, use_container_width=True)
+
+st.subheader("📊 Skill Importance Breakdown")
+if strategy.bottlenecks:
+    importance_df = pd.DataFrame(
+        strategy.bottlenecks[:8],
+        columns=["Skill", "Weight"],
+    ).sort_values("Weight", ascending=False)
+
+    fig_importance = px.pie(
+        importance_df,
+        names="Skill",
+        values="Weight",
+        title="Where Your Gap Comes From",
+    )
+    st.plotly_chart(fig_importance, use_container_width=True)
 
 st.subheader("📊 Skill Gap Visualization")
 if strategy.bottlenecks:
