@@ -132,6 +132,84 @@ def gap_priority_label(weight: float) -> str:
     return "Helpful"
 
 
+def build_why_not_ready(
+    target_role: str,
+    readiness_score: float,
+    bottlenecks: list[tuple[str, float]],
+    estimated_months: int,
+) -> list[str]:
+    reasons = []
+
+    if readiness_score < 50:
+        reasons.append(
+            f"Your current readiness for {format_role_name(target_role)} is still low at {readiness_score:.1f}%."
+        )
+    elif readiness_score < 75:
+        reasons.append(
+            f"You already have some alignment, but your readiness is still incomplete at {readiness_score:.1f}%."
+        )
+
+    if estimated_months > 6:
+        reasons.append(
+            f"At your current pace, job readiness is likely to take around {estimated_months} months."
+        )
+
+    for skill, weight in bottlenecks[:3]:
+        reasons.append(
+            f"{skill} is still a major gap ({gap_priority_label(weight).lower()} priority, weight {weight:.2f})."
+        )
+
+    return reasons
+
+
+def build_skill_impact_table(
+    role_df: pd.DataFrame,
+    target_role: str,
+    user_skills: list[str],
+    hours_per_week: int,
+    bottlenecks: list[tuple[str, float]],
+    top_n: int = 5,
+) -> pd.DataFrame:
+    current_strategy = build_strategy(
+        role_df=role_df,
+        user_skills=user_skills,
+        target_role=target_role,
+        hours_per_week=hours_per_week,
+    )
+
+    rows = []
+    current_skills_lower = {s.lower() for s in user_skills}
+
+    for skill, weight in bottlenecks[:top_n]:
+        if str(skill).lower() in current_skills_lower:
+            continue
+
+        simulated_skills = sorted(set(user_skills + [skill]))
+        simulated_strategy = build_strategy(
+            role_df=role_df,
+            user_skills=simulated_skills,
+            target_role=target_role,
+            hours_per_week=hours_per_week,
+        )
+
+        readiness_gain = simulated_strategy.readiness_score - current_strategy.readiness_score
+        month_gain = (
+            current_strategy.estimated_months_to_ready
+            - simulated_strategy.estimated_months_to_ready
+        )
+
+        rows.append(
+            {
+                "Skill": skill,
+                "Priority": gap_priority_label(weight),
+                "Readiness Gain": round(readiness_gain, 1),
+                "Months Saved": max(0, month_gain),
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+
 st.title("🚀 RoleForge — Career Reality Simulator")
 st.caption("Constraint-aware career planning. Honest outcomes.")
 
@@ -282,6 +360,22 @@ resume_gap_report = analyze_resume_gaps(
     bottlenecks=strategy.bottlenecks,
 )
 
+why_not_ready = build_why_not_ready(
+    target_role=target_role,
+    readiness_score=strategy.readiness_score,
+    bottlenecks=strategy.bottlenecks,
+    estimated_months=strategy.estimated_months_to_ready,
+)
+
+skill_impact_df = build_skill_impact_table(
+    role_df=role_df,
+    target_role=target_role,
+    user_skills=user_skills,
+    hours_per_week=hours_per_week,
+    bottlenecks=strategy.bottlenecks,
+    top_n=5,
+)
+
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
@@ -349,6 +443,10 @@ if input_mode == "Upload CV" and cv_text:
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)
 
+st.subheader("🧠 Why You Are Not Ready Yet")
+for reason in why_not_ready:
+    st.write(f"- {reason}")
+
 st.subheader("🧠 AI Explanation")
 if use_llm:
     st.write_stream(
@@ -406,6 +504,55 @@ with right:
             st.write(f"- **{skill}** — weight {weight:.2f} | priority: **{priority}**")
     else:
         st.write("No bottlenecks detected.")
+
+st.subheader("⚡ Skill Impact Ranking")
+if not skill_impact_df.empty:
+    st.dataframe(skill_impact_df, use_container_width=True)
+
+    fig_skill_impact = px.bar(
+        skill_impact_df.sort_values("Readiness Gain", ascending=True),
+        x="Readiness Gain",
+        y="Skill",
+        orientation="h",
+        title="If You Learn One More Skill, What Helps Most?",
+    )
+    st.plotly_chart(fig_skill_impact, use_container_width=True)
+else:
+    st.write("No skill impact ranking available.")
+
+st.subheader("🔮 What If You Learn One More Skill?")
+what_if_skill = st.text_input(
+    "Try a skill and simulate the impact",
+    placeholder="sql, docker, statistics, system design",
+)
+
+if what_if_skill.strip():
+    simulated_skills = sorted(set(user_skills + [what_if_skill.strip()]))
+    simulated_strategy = build_strategy(
+        role_df=role_df,
+        user_skills=simulated_skills,
+        target_role=target_role,
+        hours_per_week=hours_per_week,
+    )
+
+    wc1, wc2, wc3 = st.columns(3)
+    wc1.metric(
+        "New Readiness",
+        f"{simulated_strategy.readiness_score:.1f}%",
+        delta=round(simulated_strategy.readiness_score - strategy.readiness_score, 1),
+    )
+    wc2.metric(
+        "New Months to Ready",
+        simulated_strategy.estimated_months_to_ready,
+        delta=(
+            strategy.estimated_months_to_ready
+            - simulated_strategy.estimated_months_to_ready
+        ),
+    )
+    wc3.metric(
+        "New Fastest Role",
+        format_role_name(simulated_strategy.fastest_role),
+    )
 
 st.subheader("📝 Resume Gap Fixer")
 st.markdown("**Missing keywords to strengthen in your CV / portfolio**")
