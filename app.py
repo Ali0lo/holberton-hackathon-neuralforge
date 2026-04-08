@@ -24,6 +24,7 @@ from roleforge.cv_parser import (
     extract_skills_from_text,
 )
 from roleforge.report_export import build_roleforge_report_pdf
+from roleforge.project_generator import generate_project_recommendation
 
 
 @st.cache_data
@@ -120,6 +121,14 @@ def build_compact_roadmap(
     compact.append((label, current_tasks))
 
     return compact
+
+
+def gap_priority_label(weight: float) -> str:
+    if weight >= 4.5:
+        return "Critical"
+    if weight >= 3.5:
+        return "Important"
+    return "Helpful"
 
 
 st.title("🚀 RoleForge — Career Reality Simulator")
@@ -260,6 +269,12 @@ recommended_courses = recommend_courses(
     target_role=target_role,
 )
 
+project_recommendation = generate_project_recommendation(
+    target_role=target_role,
+    matched_skills=strategy.matched_skills,
+    bottlenecks=strategy.bottlenecks,
+)
+
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
@@ -282,6 +297,16 @@ else:
     st.error(
         "This goal is unrealistic for the selected timeframe at your current readiness level."
     )
+
+st.subheader("🎯 Suggested Roles Based on Your Profile")
+if strategy.alternative_roles:
+    top_roles = strategy.alternative_roles[:3]
+    cols = st.columns(len(top_roles))
+    for col, (role, score) in zip(cols, top_roles):
+        with col:
+            st.metric(format_role_name(role), f"{score:.1f}%")
+else:
+    st.write("No role suggestions available.")
 
 if input_mode == "Upload CV" and cv_text:
     st.subheader("📄 CV Overview")
@@ -364,7 +389,8 @@ with right:
     st.subheader("🚧 Top Bottlenecks")
     if strategy.bottlenecks:
         for skill, weight in strategy.bottlenecks[:5]:
-            st.write(f"- **{skill}** — weight {weight:.2f}")
+            priority = gap_priority_label(weight)
+            st.write(f"- **{skill}** — weight {weight:.2f} | priority: **{priority}**")
     else:
         st.write("No bottlenecks detected.")
 
@@ -383,6 +409,18 @@ if strategy.alternative_roles:
         st.write(f"- **{format_role_name(role)}** — similarity score: {score:.1f}%")
 else:
     st.write("No alternative roles found.")
+
+st.subheader("🛠️ Suggested Portfolio Project")
+st.markdown(f"**{project_recommendation['title']}**")
+st.write(project_recommendation["summary"])
+
+st.markdown("**What you will build**")
+for item in project_recommendation["deliverables"]:
+    st.write(f"- {item}")
+
+st.markdown("**Why this project matters**")
+for item in project_recommendation["why_it_matters"]:
+    st.write(f"- {item}")
 
 st.subheader("📈 Learning Curve")
 curve_df = pd.DataFrame(strategy.projection_series)
