@@ -1,456 +1,126 @@
 role,skill,weight
-Software Engineer,Programming,4.249166666666667
-Software Engineer,Critical Thinking,3.825833333333333
-Software Engineer,Active Listening,3.6174999999999997
-Software Engineer,Complex Problem Solving,3.5341666666666667
-Software Engineer,Reading Comprehension,3.533333333333333
-Software Engineer,Systems Analysis,3.3866666666666667
-Software Engineer,Judgment and Decision Making,3.3825000000000003
-Software Engineer,Writing,3.333333333333333
-Software Engineer,Active Learning,3.2783333333333333
-Software Engineer,Systems Evaluation,3.25
-Software Engineer,Speaking,3.246666666666667
-Software Engineer,Operations Analysis,3.174166666666667
-Software Engineer,Quality Control Analysis,3.1674999999999995
-Software Engineer,Monitoring,3.1033333333333335
-Software Engineer,Time Management,3.1
-Software Engineer,Coordination,3.0
-Software Engineer,Technology Design,2.9908333333333332
-Software Engineer,Social Perceptiveness,2.9799999999999995
-Software Engineer,Mathematics,2.904166666666667
-Software Engineer,Instructing,2.6783333333333332
-Software Engineer,Persuasion,2.654166666666667
-Software Engineer,Operations Monitoring,2.583333333333333
-Software Engineer,Learning Strategies,2.5633333333333335
-Software Engineer,Service Orientation,2.5541666666666667
-Software Engineer,Troubleshooting,2.5091666666666668
-Software Engineer,Science,2.4875
-Software Engineer,Management of Personnel Resources,2.3825000000000003
-Software Engineer,Negotiation,2.328333333333333
-Software Engineer,Management of Financial Resources,1.8125
-Software Engineer,Management of Material Resources,1.7583333333333333
-Software Engineer,Installation,1.6375
-Software Engineer,Operation and Control,1.6133333333333333
-Software Engineer,Equipment Selection,1.5916666666666668
-Software Engineer,Equipment Maintenance,1.1041666666666665
-Software Engineer,Repairing,1.07
-Frontend Developer,Programming,4.09
-Frontend Developer,Critical Thinking,3.7824999999999998
-Frontend Developer,Reading Comprehension,3.59
-Frontend Developer,Complex Problem Solving,3.56
-Frontend Developer,Operations Analysis,3.5275
-Frontend Developer,Active Learning,3.5
-Frontend Developer,Active Listening,3.4699999999999998
-Frontend Developer,Judgment and Decision Making,3.44
-Frontend Developer,Speaking,3.2175000000000002
-Frontend Developer,Systems Analysis,3.215
-Frontend Developer,Writing,3.1525
-Frontend Developer,Systems Evaluation,3.0949999999999998
-Frontend Developer,Time Management,3.0300000000000002
-Frontend Developer,Coordination,3.0
-Frontend Developer,Monitoring,3.0
-Frontend Developer,Service Orientation,2.88
-Frontend Developer,Social Perceptiveness,2.88
-Frontend Developer,Persuasion,2.8475
-Frontend Developer,Learning Strategies,2.815
-Frontend Developer,Instructing,2.7824999999999998
-Frontend Developer,Mathematics,2.75
-Frontend Developer,Quality Control Analysis,2.75
-Frontend Developer,Technology Design,2.7199999999999998
-Frontend Developer,Negotiation,2.7175000000000002
-Frontend Developer,Operations Monitoring,2.375
-Frontend Developer,Management of Personnel Resources,2.3475
-Frontend Developer,Troubleshooting,2.245
-Frontend Developer,Equipment Selection,2.0300000000000002
-Frontend Developer,Science,2.0300000000000002
-Frontend Developer,Management of Financial Resources,1.75
-Frontend Developer,Management of Material Resources,1.7175
-Frontend Developer,Operation and Control,1.715
-Frontend Developer,Installation,1.4075
-Frontend Developer,Equipment Maintenance,1.0625
-Frontend Developer,Repairing,1.03
-Backend Developer,Programming,4.375
-Backend Developer,Critical Thinking,3.815
-Backend Developer,Active Listening,3.565
-Backend Developer,Complex Problem Solving,3.565
-Backend Developer,Reading Comprehension,3.44
-Backend Developer,Systems Analysis,3.44
-Backend Developer,Judgment and Decision Making,3.435
-Backend Developer,Active Learning,3.31
-Backend Developer,Systems Evaluation,3.25
-Backend Developer,Writing,3.25
-Backend Developer,Operations Analysis,3.185
-Backend Developer,Quality Control Analysis,3.125
-Backend Developer,Speaking,3.12
-Backend Developer,Time Management,3.12
-Backend Developer,Technology Design,3.065
-Backend Developer,Coordination,3.0
-Backend Developer,Monitoring,3.0
-Backend Developer,Social Perceptiveness,3.0
-Backend Developer,Mathematics,2.935
-Backend Developer,Instructing,2.69
-Backend Developer,Persuasion,2.685
-Backend Developer,Service Orientation,2.565
-Backend Developer,Learning Strategies,2.5
-Backend Developer,Operations Monitoring,2.5
-Backend Developer,Management of Personnel Resources,2.435
-Backend Developer,Science,2.435
-Backend Developer,Troubleshooting,2.435
-Backend Developer,Negotiation,2.37
-Backend Developer,Management of Financial Resources,1.875
-Backend Developer,Management of Material Resources,1.81
-Backend Developer,Installation,1.565
-Backend Developer,Equipment Selection,1.56
-Backend Developer,Operation and Control,1.56
-Backend Developer,Equipment Maintenance,1.125
-Backend Developer,Repairing,1.06
-Data Analyst,Reading Comprehension,4.0
-Data Analyst,Active Learning,3.88
-Data Analyst,Active Listening,3.88
-Data Analyst,Critical Thinking,3.88
-Data Analyst,Speaking,3.88
-Data Analyst,Writing,3.75
-Data Analyst,Judgment and Decision Making,3.62
-Data Analyst,Mathematics,3.5
-Data Analyst,Complex Problem Solving,3.38
-Data Analyst,Monitoring,3.12
-Data Analyst,Systems Analysis,3.12
-Data Analyst,Systems Evaluation,3.12
-Data Analyst,Time Management,3.12
-Data Analyst,Coordination,3.0
-Data Analyst,Instructing,3.0
-Data Analyst,Learning Strategies,3.0
-Data Analyst,Persuasion,2.88
-Data Analyst,Service Orientation,2.88
-Data Analyst,Social Perceptiveness,2.88
-Data Analyst,Negotiation,2.5
-Data Analyst,Programming,2.5
-Data Analyst,Management of Personnel Resources,2.12
-Data Analyst,Quality Control Analysis,2.0
-Data Analyst,Management of Financial Resources,1.88
-Data Analyst,Operations Analysis,1.88
-Data Analyst,Management of Material Resources,1.75
-Data Analyst,Operations Monitoring,1.75
-Data Analyst,Science,1.62
-Data Analyst,Technology Design,1.62
-Data Analyst,Operation and Control,1.38
-Data Analyst,Equipment Maintenance,1.0
-Data Analyst,Equipment Selection,1.0
-Data Analyst,Installation,1.0
-Data Analyst,Repairing,1.0
-Data Analyst,Troubleshooting,1.0
-Data Engineer,Complex Problem Solving,3.88
-Data Engineer,Critical Thinking,3.88
-Data Engineer,Judgment and Decision Making,3.815
-Data Engineer,Reading Comprehension,3.815
-Data Engineer,Active Listening,3.625
-Data Engineer,Speaking,3.44
-Data Engineer,Systems Analysis,3.435
-Data Engineer,Programming,3.38
-Data Engineer,Active Learning,3.375
-Data Engineer,Monitoring,3.185
-Data Engineer,Systems Evaluation,3.185
-Data Engineer,Writing,3.185
-Data Engineer,Operations Analysis,3.12
-Data Engineer,Coordination,3.0
-Data Engineer,Mathematics,3.0
-Data Engineer,Instructing,2.94
-Data Engineer,Learning Strategies,2.94
-Data Engineer,Service Orientation,2.94
-Data Engineer,Social Perceptiveness,2.94
-Data Engineer,Time Management,2.94
-Data Engineer,Persuasion,2.75
-Data Engineer,Technology Design,2.69
-Data Engineer,Management of Personnel Resources,2.625
-Data Engineer,Operations Monitoring,2.435
-Data Engineer,Negotiation,2.31
-Data Engineer,Quality Control Analysis,2.25
-Data Engineer,Troubleshooting,2.19
-Data Engineer,Management of Material Resources,1.94
-Data Engineer,Science,1.94
-Data Engineer,Management of Financial Resources,1.875
-Data Engineer,Operation and Control,1.625
-Data Engineer,Equipment Selection,1.56
-Data Engineer,Installation,1.5
-Data Engineer,Repairing,1.12
-Data Engineer,Equipment Maintenance,1.06
-AI Engineer,Critical Thinking,3.94
-AI Engineer,Judgment and Decision Making,3.81
-AI Engineer,Programming,3.81
-AI Engineer,Complex Problem Solving,3.69
-AI Engineer,Reading Comprehension,3.625
-AI Engineer,Systems Analysis,3.625
-AI Engineer,Active Listening,3.565
-AI Engineer,Active Learning,3.5
-AI Engineer,Systems Evaluation,3.5
-AI Engineer,Writing,3.315
-AI Engineer,Speaking,3.31
-AI Engineer,Technology Design,3.25
-AI Engineer,Time Management,3.25
-AI Engineer,Operations Analysis,3.185
-AI Engineer,Mathematics,3.065
-AI Engineer,Monitoring,3.06
-AI Engineer,Coordination,3.0
-AI Engineer,Instructing,2.94
-AI Engineer,Social Perceptiveness,2.94
-AI Engineer,Service Orientation,2.815
-AI Engineer,Learning Strategies,2.81
-AI Engineer,Persuasion,2.75
-AI Engineer,Operations Monitoring,2.685
-AI Engineer,Science,2.62
-AI Engineer,Management of Personnel Resources,2.565
-AI Engineer,Quality Control Analysis,2.565
-AI Engineer,Negotiation,2.56
-AI Engineer,Troubleshooting,2.5
-AI Engineer,Management of Financial Resources,2.125
-AI Engineer,Equipment Selection,2.0
-AI Engineer,Operation and Control,2.0
-AI Engineer,Management of Material Resources,1.935
-AI Engineer,Installation,1.44
-AI Engineer,Equipment Maintenance,1.185
-AI Engineer,Repairing,1.12
-ML Engineer,Critical Thinking,3.94
-ML Engineer,Judgment and Decision Making,3.81
-ML Engineer,Programming,3.81
-ML Engineer,Complex Problem Solving,3.69
-ML Engineer,Reading Comprehension,3.625
-ML Engineer,Systems Analysis,3.625
-ML Engineer,Active Listening,3.565
-ML Engineer,Active Learning,3.5
-ML Engineer,Systems Evaluation,3.5
-ML Engineer,Writing,3.315
-ML Engineer,Speaking,3.31
-ML Engineer,Technology Design,3.25
-ML Engineer,Time Management,3.25
-ML Engineer,Operations Analysis,3.185
-ML Engineer,Mathematics,3.065
-ML Engineer,Monitoring,3.06
-ML Engineer,Coordination,3.0
-ML Engineer,Instructing,2.94
-ML Engineer,Social Perceptiveness,2.94
-ML Engineer,Service Orientation,2.815
-ML Engineer,Learning Strategies,2.81
-ML Engineer,Persuasion,2.75
-ML Engineer,Operations Monitoring,2.685
-ML Engineer,Science,2.62
-ML Engineer,Management of Personnel Resources,2.565
-ML Engineer,Quality Control Analysis,2.565
-ML Engineer,Negotiation,2.56
-ML Engineer,Troubleshooting,2.5
-ML Engineer,Management of Financial Resources,2.125
-ML Engineer,Equipment Selection,2.0
-ML Engineer,Operation and Control,2.0
-ML Engineer,Management of Material Resources,1.935
-ML Engineer,Installation,1.44
-ML Engineer,Equipment Maintenance,1.185
-ML Engineer,Repairing,1.12
-Deep Learning Engineer,Complex Problem Solving,4.0
-Deep Learning Engineer,Critical Thinking,4.0
-Deep Learning Engineer,Judgment and Decision Making,4.0
-Deep Learning Engineer,Active Listening,3.75
-Deep Learning Engineer,Reading Comprehension,3.75
-Deep Learning Engineer,Systems Analysis,3.75
-Deep Learning Engineer,Programming,3.62
-Deep Learning Engineer,Systems Evaluation,3.62
-Deep Learning Engineer,Active Learning,3.5
-Deep Learning Engineer,Speaking,3.5
-Deep Learning Engineer,Mathematics,3.38
-Deep Learning Engineer,Time Management,3.38
-Deep Learning Engineer,Writing,3.38
-Deep Learning Engineer,Monitoring,3.12
-Deep Learning Engineer,Operations Analysis,3.12
-Deep Learning Engineer,Science,3.12
-Deep Learning Engineer,Technology Design,3.12
-Deep Learning Engineer,Coordination,3.0
-Deep Learning Engineer,Instructing,3.0
-Deep Learning Engineer,Learning Strategies,3.0
-Deep Learning Engineer,Social Perceptiveness,3.0
-Deep Learning Engineer,Management of Personnel Resources,2.88
-Deep Learning Engineer,Persuasion,2.75
-Deep Learning Engineer,Service Orientation,2.75
-Deep Learning Engineer,Operations Monitoring,2.62
-Deep Learning Engineer,Management of Financial Resources,2.5
-Deep Learning Engineer,Negotiation,2.5
-Deep Learning Engineer,Quality Control Analysis,2.38
-Deep Learning Engineer,Troubleshooting,2.38
-Deep Learning Engineer,Management of Material Resources,2.25
-Deep Learning Engineer,Operation and Control,2.0
-Deep Learning Engineer,Equipment Selection,1.88
-Deep Learning Engineer,Equipment Maintenance,1.12
-Deep Learning Engineer,Repairing,1.12
-Deep Learning Engineer,Installation,1.0
-Cybersecurity Engineer,Reading Comprehension,4.0
-Cybersecurity Engineer,Critical Thinking,3.88
-Cybersecurity Engineer,Active Listening,3.75
-Cybersecurity Engineer,Complex Problem Solving,3.75
-Cybersecurity Engineer,Speaking,3.62
-Cybersecurity Engineer,Writing,3.5
-Cybersecurity Engineer,Judgment and Decision Making,3.38
-Cybersecurity Engineer,Monitoring,3.38
-Cybersecurity Engineer,Systems Analysis,3.38
-Cybersecurity Engineer,Active Learning,3.25
-Cybersecurity Engineer,Time Management,3.12
-Cybersecurity Engineer,Coordination,3.0
-Cybersecurity Engineer,Operations Monitoring,3.0
-Cybersecurity Engineer,Quality Control Analysis,3.0
-Cybersecurity Engineer,Systems Evaluation,3.0
-Cybersecurity Engineer,Instructing,2.88
-Cybersecurity Engineer,Learning Strategies,2.88
-Cybersecurity Engineer,Management of Personnel Resources,2.88
-Cybersecurity Engineer,Service Orientation,2.88
-Cybersecurity Engineer,Social Perceptiveness,2.75
-Cybersecurity Engineer,Negotiation,2.62
-Cybersecurity Engineer,Persuasion,2.62
-Cybersecurity Engineer,Programming,2.62
-Cybersecurity Engineer,Operations Analysis,2.5
-Cybersecurity Engineer,Mathematics,2.25
-Cybersecurity Engineer,Technology Design,2.12
-Cybersecurity Engineer,Troubleshooting,2.12
-Cybersecurity Engineer,Science,1.88
-Cybersecurity Engineer,Equipment Selection,1.75
-Cybersecurity Engineer,Management of Financial Resources,1.75
-Cybersecurity Engineer,Management of Material Resources,1.75
-Cybersecurity Engineer,Operation and Control,1.75
-Cybersecurity Engineer,Equipment Maintenance,1.62
-Cybersecurity Engineer,Repairing,1.62
-Cybersecurity Engineer,Installation,1.5
-QA Engineer,Reading Comprehension,4.0
-QA Engineer,Active Listening,3.88
-QA Engineer,Critical Thinking,3.88
-QA Engineer,Speaking,3.88
-QA Engineer,Writing,3.75
-QA Engineer,Monitoring,3.62
-QA Engineer,Programming,3.62
-QA Engineer,Complex Problem Solving,3.38
-QA Engineer,Quality Control Analysis,3.38
-QA Engineer,Systems Evaluation,3.25
-QA Engineer,Active Learning,3.12
-QA Engineer,Judgment and Decision Making,3.12
-QA Engineer,Operations Analysis,3.12
-QA Engineer,Systems Analysis,3.12
-QA Engineer,Coordination,3.0
-QA Engineer,Operations Monitoring,3.0
-QA Engineer,Time Management,3.0
-QA Engineer,Learning Strategies,2.88
-QA Engineer,Social Perceptiveness,2.88
-QA Engineer,Troubleshooting,2.88
-QA Engineer,Mathematics,2.75
-QA Engineer,Science,2.75
-QA Engineer,Instructing,2.62
-QA Engineer,Technology Design,2.62
-QA Engineer,Persuasion,2.5
-QA Engineer,Service Orientation,2.5
-QA Engineer,Management of Personnel Resources,2.12
-QA Engineer,Negotiation,2.12
-QA Engineer,Installation,2.0
-QA Engineer,Operation and Control,1.88
-QA Engineer,Equipment Selection,1.75
-QA Engineer,Management of Financial Resources,1.5
-QA Engineer,Management of Material Resources,1.5
-QA Engineer,Repairing,1.12
-QA Engineer,Equipment Maintenance,1.0
-Systems Analyst,Speaking,4.0
-Systems Analyst,Reading Comprehension,3.88
-Systems Analyst,Active Listening,3.75
-Systems Analyst,Critical Thinking,3.75
-Systems Analyst,Systems Analysis,3.75
-Systems Analyst,Systems Evaluation,3.75
-Systems Analyst,Active Learning,3.62
-Systems Analyst,Judgment and Decision Making,3.62
-Systems Analyst,Complex Problem Solving,3.38
-Systems Analyst,Monitoring,3.38
-Systems Analyst,Writing,3.38
-Systems Analyst,Programming,3.25
-Systems Analyst,Coordination,3.12
-Systems Analyst,Learning Strategies,3.12
-Systems Analyst,Social Perceptiveness,3.12
-Systems Analyst,Time Management,3.12
-Systems Analyst,Troubleshooting,3.12
-Systems Analyst,Mathematics,3.0
-Systems Analyst,Operations Analysis,3.0
-Systems Analyst,Operations Monitoring,3.0
-Systems Analyst,Quality Control Analysis,3.0
-Systems Analyst,Service Orientation,3.0
-Systems Analyst,Instructing,2.88
-Systems Analyst,Management of Personnel Resources,2.88
-Systems Analyst,Technology Design,2.88
-Systems Analyst,Persuasion,2.75
-Systems Analyst,Negotiation,2.5
-Systems Analyst,Operation and Control,2.5
-Systems Analyst,Equipment Selection,2.25
-Systems Analyst,Science,2.25
-Systems Analyst,Management of Financial Resources,2.12
-Systems Analyst,Management of Material Resources,2.0
-Systems Analyst,Equipment Maintenance,1.88
-Systems Analyst,Repairing,1.88
-Systems Analyst,Installation,1.62
-Systems Engineer,Critical Thinking,3.88
-Systems Engineer,Judgment and Decision Making,3.88
-Systems Engineer,Reading Comprehension,3.88
-Systems Engineer,Systems Analysis,3.88
-Systems Engineer,Active Listening,3.75
-Systems Engineer,Complex Problem Solving,3.75
-Systems Engineer,Monitoring,3.75
-Systems Engineer,Systems Evaluation,3.75
-Systems Engineer,Troubleshooting,3.75
-Systems Engineer,Programming,3.62
-Systems Engineer,Operations Monitoring,3.38
-Systems Engineer,Speaking,3.38
-Systems Engineer,Quality Control Analysis,3.25
-Systems Engineer,Active Learning,3.12
-Systems Engineer,Operations Analysis,3.12
-Systems Engineer,Time Management,3.12
-Systems Engineer,Writing,3.12
-Systems Engineer,Coordination,3.0
-Systems Engineer,Equipment Maintenance,3.0
-Systems Engineer,Management of Personnel Resources,3.0
-Systems Engineer,Mathematics,3.0
-Systems Engineer,Operation and Control,3.0
-Systems Engineer,Repairing,3.0
-Systems Engineer,Service Orientation,3.0
-Systems Engineer,Social Perceptiveness,3.0
-Systems Engineer,Equipment Selection,2.88
-Systems Engineer,Instructing,2.88
-Systems Engineer,Learning Strategies,2.75
-Systems Engineer,Management of Material Resources,2.75
-Systems Engineer,Persuasion,2.75
-Systems Engineer,Technology Design,2.75
-Systems Engineer,Negotiation,2.5
-Systems Engineer,Installation,2.38
-Systems Engineer,Science,2.25
-Systems Engineer,Management of Financial Resources,2.0
-AI / ML Research Scientist,Complex Problem Solving,4.0
-AI / ML Research Scientist,Critical Thinking,4.0
-AI / ML Research Scientist,Judgment and Decision Making,4.0
-AI / ML Research Scientist,Active Listening,3.75
-AI / ML Research Scientist,Reading Comprehension,3.75
-AI / ML Research Scientist,Systems Analysis,3.75
-AI / ML Research Scientist,Programming,3.62
-AI / ML Research Scientist,Systems Evaluation,3.62
-AI / ML Research Scientist,Active Learning,3.5
-AI / ML Research Scientist,Speaking,3.5
-AI / ML Research Scientist,Mathematics,3.38
-AI / ML Research Scientist,Time Management,3.38
-AI / ML Research Scientist,Writing,3.38
-AI / ML Research Scientist,Monitoring,3.12
-AI / ML Research Scientist,Operations Analysis,3.12
-AI / ML Research Scientist,Science,3.12
-AI / ML Research Scientist,Technology Design,3.12
-AI / ML Research Scientist,Coordination,3.0
-AI / ML Research Scientist,Instructing,3.0
-AI / ML Research Scientist,Learning Strategies,3.0
-AI / ML Research Scientist,Social Perceptiveness,3.0
-AI / ML Research Scientist,Management of Personnel Resources,2.88
-AI / ML Research Scientist,Persuasion,2.75
-AI / ML Research Scientist,Service Orientation,2.75
-AI / ML Research Scientist,Operations Monitoring,2.62
-AI / ML Research Scientist,Management of Financial Resources,2.5
-AI / ML Research Scientist,Negotiation,2.5
-AI / ML Research Scientist,Quality Control Analysis,2.38
-AI / ML Research Scientist,Troubleshooting,2.38
-AI / ML Research Scientist,Management of Material Resources,2.25
-AI / ML Research Scientist,Operation and Control,2.0
-AI / ML Research Scientist,Equipment Selection,1.88
-AI / ML Research Scientist,Equipment Maintenance,1.12
-AI / ML Research Scientist,Repairing,1.12
-AI / ML Research Scientist,Installation,1.0
+AI Engineer,Python,5.0
+AI Engineer,Machine Learning,5.0
+AI Engineer,Deep Learning,4.8
+AI Engineer,Large Language Models,4.8
+AI Engineer,Natural Language Processing,4.5
+AI Engineer,PyTorch,4.5
+AI Engineer,TensorFlow,4.2
+AI Engineer,APIs,4.0
+AI Engineer,Git,3.5
+AI Engineer,Docker,3.5
+AI Engineer,Vector Databases,3.8
+AI Engineer,RAG,4.2
+ML Engineer,Python,5.0
+ML Engineer,Machine Learning,5.0
+ML Engineer,Deep Learning,4.6
+ML Engineer,Scikit-learn,4.5
+ML Engineer,PyTorch,4.4
+ML Engineer,TensorFlow,4.2
+ML Engineer,NumPy,4.2
+ML Engineer,Pandas,4.0
+ML Engineer,Statistics,4.3
+ML Engineer,SQL,3.8
+ML Engineer,MLOps,4.0
+ML Engineer,Docker,3.5
+ML Engineer,Git,3.2
+Deep Learning Engineer,Python,5.0
+Deep Learning Engineer,Deep Learning,5.0
+Deep Learning Engineer,PyTorch,4.8
+Deep Learning Engineer,TensorFlow,4.6
+Deep Learning Engineer,Machine Learning,4.2
+Deep Learning Engineer,NumPy,4.0
+Deep Learning Engineer,Computer Vision,4.2
+Deep Learning Engineer,Natural Language Processing,4.2
+Deep Learning Engineer,Git,3.0
+Deep Learning Engineer,Docker,3.2
+Data Scientist,Python,5.0
+Data Scientist,Statistics,5.0
+Data Scientist,Machine Learning,4.6
+Data Scientist,Pandas,4.5
+Data Scientist,NumPy,4.4
+Data Scientist,SQL,4.2
+Data Scientist,Data Visualization,4.2
+Data Scientist,Scikit-learn,4.3
+Data Scientist,Experimentation,3.8
+Data Scientist,Feature Engineering,4.0
+Data Analyst,SQL,5.0
+Data Analyst,Excel,5.0
+Data Analyst,Python,4.0
+Data Analyst,Pandas,4.0
+Data Analyst,Data Visualization,4.5
+Data Analyst,Statistics,3.8
+Data Analyst,BI Tools,4.2
+Data Analyst,Dashboarding,4.4
+Data Engineer,Python,4.5
+Data Engineer,SQL,5.0
+Data Engineer,ETL,4.8
+Data Engineer,Data Warehousing,4.5
+Data Engineer,Apache Spark,4.4
+Data Engineer,Airflow,4.2
+Data Engineer,Cloud,4.0
+Data Engineer,Docker,3.6
+Data Engineer,Git,3.2
+MLOps Engineer,Python,4.4
+MLOps Engineer,MLOps,5.0
+MLOps Engineer,Docker,4.8
+MLOps Engineer,Kubernetes,4.5
+MLOps Engineer,CI/CD,4.3
+MLOps Engineer,Cloud,4.2
+MLOps Engineer,Monitoring,4.0
+MLOps Engineer,Git,3.8
+MLOps Engineer,APIs,3.5
+Software Engineer,Python,4.2
+Software Engineer,JavaScript,4.0
+Software Engineer,Git,4.5
+Software Engineer,APIs,4.2
+Software Engineer,Docker,3.8
+Software Engineer,SQL,3.6
+Software Engineer,Data Structures,4.3
+Software Engineer,Algorithms,4.3
+Software Engineer,System Design,4.0
+Frontend Developer,HTML,5.0
+Frontend Developer,CSS,5.0
+Frontend Developer,JavaScript,5.0
+Frontend Developer,React,4.6
+Frontend Developer,Git,3.8
+Frontend Developer,APIs,3.8
+Frontend Developer,UI/UX,4.0
+Backend Developer,Python,4.5
+Backend Developer,Java,4.0
+Backend Developer,Node.js,4.0
+Backend Developer,APIs,5.0
+Backend Developer,SQL,4.5
+Backend Developer,Docker,3.8
+Backend Developer,Git,4.0
+Backend Developer,System Design,4.0
+Cybersecurity Engineer,Networking,5.0
+Cybersecurity Engineer,Linux,5.0
+Cybersecurity Engineer,Python,4.0
+Cybersecurity Engineer,Security Fundamentals,5.0
+Cybersecurity Engineer,SIEM,4.2
+Cybersecurity Engineer,Cloud,3.8
+Cybersecurity Engineer,Git,2.8
+Cybersecurity Engineer,Incident Response,4.2
+QA Engineer,Testing,5.0
+QA Engineer,Automation Testing,4.8
+QA Engineer,Python,3.8
+QA Engineer,Selenium,4.4
+QA Engineer,API Testing,4.2
+QA Engineer,Git,3.4
+QA Engineer,CI/CD,3.6
+Systems Analyst,SQL,4.2
+Systems Analyst,Business Analysis,5.0
+Systems Analyst,Requirements Gathering,4.8
+Systems Analyst,Process Modeling,4.2
+Systems Analyst,Documentation,4.0
+Systems Analyst,Stakeholder Communication,4.0
+AI Research Scientist,Python,5.0
+AI Research Scientist,Machine Learning,5.0
+AI Research Scientist,Deep Learning,5.0
+AI Research Scientist,PyTorch,4.8
+AI Research Scientist,TensorFlow,4.4
+AI Research Scientist,Mathematics,4.8
+AI Research Scientist,Research,4.6
+AI Research Scientist,Experimentation,4.2
+AI Research Scientist,Large Language Models,4.4
