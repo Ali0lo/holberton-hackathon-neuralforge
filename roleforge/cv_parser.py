@@ -4,7 +4,7 @@ from typing import List, Set, Tuple
 
 import pandas as pd
 from PyPDF2 import PdfReader
-import docx
+from docx import Document
 
 from roleforge.llm_helper import llm_extract_cv_skills
 
@@ -26,46 +26,68 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
     return "\n".join(pages)
 
 
-def extract_text_from_docx(file_bytes: bytes) -> str:
-    bio = BytesIO(file_bytes)
-    document = docx.Document(bio)
-    lines = [p.text for p in document.paragraphs if p.text]
-    return "\n".join(lines)
+def extract_text_from_docx(file) -> str:
+    doc = Document(file)
+    text = []
+
+    for para in doc.paragraphs:
+        if para.text:
+            text.append(para.text)
+
+    return "\n".join(text)
 
 
 def extract_text_from_txt(file_bytes: bytes) -> str:
     return file_bytes.decode("utf-8", errors="ignore")
 
 
-def extract_text_from_uploaded_file(uploaded_file) -> str:
-    file_name = uploaded_file.name.lower()
-    file_bytes = uploaded_file.read()
+def extract_text_from_uploaded_file(file):
+    file_type = file.name.split(".")[-1].lower()
 
-    if file_name.endswith(".pdf"):
+    if file_type == "pdf":
+        file_bytes = file.read()
         return extract_text_from_pdf(file_bytes)
-    if file_name.endswith(".docx"):
-        return extract_text_from_docx(file_bytes)
-    if file_name.endswith(".txt"):
-        return extract_text_from_txt(file_bytes)
 
-    raise ValueError("Unsupported file type. Please upload PDF, DOCX, or TXT.")
+    elif file_type == "docx":
+        return extract_text_from_docx(file)
+
+    elif file_type == "txt":
+        return file.read().decode("utf-8", errors="ignore")
+
+    else:
+        raise ValueError("Unsupported file type")
 
 
 def build_skill_aliases() -> dict:
     return {
         "python": ["python", "py", "python3"],
         "machine learning": [
-            "machine learning", "ml", "supervised learning", "unsupervised learning",
-            "reinforcement learning", "classical machine learning", "predictive modeling",
-            "model training", "model evaluation"
+            "machine learning",
+            "ml",
+            "supervised learning",
+            "unsupervised learning",
+            "reinforcement learning",
+            "classical machine learning",
+            "predictive modeling",
+            "model training",
+            "model evaluation",
         ],
         "artificial intelligence": ["artificial intelligence", "ai"],
         "deep learning": [
-            "deep learning", "dl", "neural networks", "neural network", "cnn", "rnn"
+            "deep learning",
+            "dl",
+            "neural networks",
+            "neural network",
+            "cnn",
+            "rnn",
         ],
         "large language models": [
-            "large language models", "llm", "llms", "transformers", "transformer models",
-            "prompt engineering"
+            "large language models",
+            "llm",
+            "llms",
+            "transformers",
+            "transformer models",
+            "prompt engineering",
         ],
         "natural language processing": ["natural language processing", "nlp"],
         "computer vision": ["computer vision", "cv"],
@@ -75,46 +97,70 @@ def build_skill_aliases() -> dict:
         "numpy": ["numpy", "np"],
         "pandas": ["pandas", "pd"],
         "statistics": ["statistics", "stats", "stat"],
-        "sql": ["sql", "postgres", "postgresql", "mysql"],
+        "sql": ["sql", "postgres", "postgresql", "mysql", "databases"],
         "apis": ["api", "apis", "rest api", "rest apis"],
         "git": ["git", "github", "git/github"],
         "docker": ["docker"],
         "mlops": ["mlops", "ml ops"],
         "kubernetes": ["kubernetes", "k8s"],
         "ci/cd": ["ci/cd", "cicd", "ci cd"],
-        "cloud": ["cloud", "aws", "gcp", "azure"],
+        "cloud": ["cloud", "aws", "gcp", "azure", "cloud computing", "terraform"],
         "excel": ["excel"],
         "bi tools": ["bi tools", "power bi", "tableau"],
         "dashboarding": ["dashboarding", "dashboards", "dashboard"],
-        "etl": ["etl"],
+        "etl": ["etl", "data pipelines"],
         "data warehousing": ["data warehousing", "data warehouse"],
         "apache spark": ["apache spark", "spark", "pyspark"],
         "airflow": ["airflow", "apache airflow"],
         "html": ["html"],
         "css": ["css"],
-        "javascript": ["javascript", "js"],
+        "javascript": ["javascript", "js", "web development"],
         "react": ["react", "reactjs"],
         "ui/ux": ["ui/ux", "ui", "ux"],
         "java": ["java"],
         "node.js": ["node.js", "nodejs", "node"],
         "networking": ["networking", "networks"],
         "linux": ["linux"],
-        "security fundamentals": ["security fundamentals", "cybersecurity", "cyber security"],
-        "siem": ["siem", "splunk"],
-        "incident response": ["incident response"],
+        "security fundamentals": [
+            "security fundamentals",
+            "cybersecurity",
+            "cyber security",
+            "network security",
+            "cloud security",
+            "firewalls",
+            "security architecture",
+            "penetration testing",
+            "web security",
+            "owasp",
+        ],
+        "siem": ["siem", "splunk", "log analysis"],
+        "incident response": [
+            "incident response",
+            "threat analysis",
+            "threat detection",
+        ],
         "testing": ["testing", "software testing"],
         "automation testing": ["automation testing", "test automation"],
         "selenium": ["selenium"],
         "api testing": ["api testing", "postman"],
         "business analysis": ["business analysis"],
-        "requirements gathering": ["requirements gathering", "requirements elicitation"],
+        "requirements gathering": [
+            "requirements gathering",
+            "requirements elicitation",
+        ],
         "process modeling": ["process modeling", "bpmn"],
         "documentation": ["documentation", "technical writing"],
         "stakeholder communication": ["stakeholder communication"],
         "mathematics": ["mathematics", "math"],
         "research": ["research"],
         "experimentation": ["experimentation", "a/b testing", "ab testing"],
-        "vector databases": ["vector databases", "vector db", "pinecone", "faiss", "chroma"],
+        "vector databases": [
+            "vector databases",
+            "vector db",
+            "pinecone",
+            "faiss",
+            "chroma",
+        ],
         "rag": ["rag", "retrieval augmented generation"],
         "data structures": ["data structures"],
         "algorithms": ["algorithms"],

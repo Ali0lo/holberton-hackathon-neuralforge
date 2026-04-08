@@ -52,6 +52,31 @@ def parse_user_skills(raw_text: str) -> list[str]:
     return [s.strip() for s in raw_text.split(",") if s.strip()]
 
 
+def format_role_name(role: str) -> str:
+    special_map = {
+        "mlops": "MLOps",
+        "ai": "AI",
+        "soc": "SOC",
+        "llm": "LLM",
+        "nlp": "NLP",
+        "cv": "CV",
+        "qa": "QA",
+        "ui": "UI",
+        "ux": "UX",
+        "ci/cd": "CI/CD",
+    }
+
+    words = str(role).split()
+    formatted = []
+    for word in words:
+        lower_word = word.lower()
+        if lower_word in special_map:
+            formatted.append(special_map[lower_word])
+        else:
+            formatted.append(word.capitalize())
+    return " ".join(formatted)
+
+
 def build_compact_roadmap(
     base_roadmap: dict, total_weeks: int
 ) -> list[tuple[str, list[str]]]:
@@ -104,10 +129,13 @@ except Exception as e:
     st.error(f"Failed to load data: {e}")
     st.stop()
 
-roles = sorted(role_df["role"].dropna().unique().tolist())
-if not roles:
+raw_roles = sorted(role_df["role"].dropna().unique().tolist())
+if not raw_roles:
     st.error("No roles found in data/role_skill_weights.csv")
     st.stop()
+
+display_roles = [format_role_name(r) for r in raw_roles]
+role_map = dict(zip(display_roles, raw_roles))
 
 allowed_skills = sorted(
     {str(skill).strip() for skill in role_df["skill"].dropna().unique().tolist()}
@@ -123,7 +151,8 @@ with st.expander("LLM Debug"):
         st.write("Secrets not accessible")
 
 st.sidebar.header("Input")
-target_role = st.sidebar.selectbox("Target role", roles)
+target_role_display = st.sidebar.selectbox("Target role", display_roles)
+target_role = role_map[target_role_display]
 input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
 
 cv_text = ""
@@ -231,7 +260,7 @@ recommended_courses = recommend_courses(
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
-c3.metric("Fastest Role", strategy.fastest_role.title())
+c3.metric("Fastest Role", format_role_name(strategy.fastest_role))
 c4.metric("Confidence", strategy.confidence)
 
 if strategy.reality_verdict == "Highly Ready":
@@ -274,7 +303,7 @@ if input_mode == "Upload CV" and cv_text:
                 seen.add(skill)
 
         for skill in detected_only:
-            st.write(f"- {skill.title()}")
+            st.write(f"- {skill}")
 
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)
@@ -338,15 +367,15 @@ with right:
 
 st.subheader("🔁 Strategy Recommendation")
 if strategy.fastest_role.lower() != target_role.lower():
-    st.info(f"Fastest realistic role: **{strategy.fastest_role.title()}**")
-    st.write(f"**Compressed path:** {strategy.compressed_path.title()}")
+    st.info(f"Fastest realistic role: **{format_role_name(strategy.fastest_role)}**")
+    st.write(f"**Compressed path:** {format_role_name(strategy.fastest_role)} -> {format_role_name(target_role)}")
 else:
     st.success("Your target role is already the best current path.")
 
 st.subheader("🧭 Closest Alternative Roles")
 if strategy.alternative_roles:
     for role, score in strategy.alternative_roles:
-        st.write(f"- **{role.title()}** — similarity score: {score:.1f}%")
+        st.write(f"- **{format_role_name(role)}** — similarity score: {score:.1f}%")
 else:
     st.write("No alternative roles found.")
 
@@ -402,11 +431,11 @@ for interval, tasks in compact_roadmap:
 
 st.subheader("📄 Export Report")
 pdf_bytes = build_roleforge_report_pdf(
-    target_role=target_role.title(),
-    user_skills=[s.title() for s in user_skills],
+    target_role=format_role_name(target_role),
+    user_skills=user_skills,
     readiness_score=strategy.readiness_score,
     reality_verdict=strategy.reality_verdict,
-    fastest_role=strategy.fastest_role.title(),
+    fastest_role=format_role_name(strategy.fastest_role),
     confidence=strategy.confidence,
     estimated_months_to_ready=strategy.estimated_months_to_ready,
     matched_skills=strategy.matched_skills,
@@ -426,7 +455,7 @@ with st.expander("Technical summary"):
     st.write("User skills:", user_skills)
     st.write("Target role:", target_role)
     st.write("Hours/week:", hours_per_week)
-    st.write("Loaded roles:", roles)
+    st.write("Loaded roles:", raw_roles)
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
     st.write("LLM skill mapping enabled:", use_llm_skill_mapping)
