@@ -181,6 +181,14 @@ c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
 c2.metric("Reality Verdict", strategy.reality_verdict)
 c3.metric("Fastest Role", strategy.fastest_role)
 c4.metric("Confidence", strategy.confidence)
+if strategy.reality_verdict == "Highly Ready":
+    st.success("You already have strong alignment with this role. Focus on polishing projects and portfolio proof.")
+elif strategy.reality_verdict == "Feasible":
+    st.success("This target looks realistic within your selected timeframe if you stay consistent.")
+elif strategy.reality_verdict == "Stretch":
+    st.warning("This role is possible, but it will require focused effort and closing several important gaps.")
+else:
+    st.error("This goal is unrealistic for the selected timeframe at your current readiness level.")
 
 if input_mode == "Upload CV" and cv_text:
     st.subheader("📄 CV Overview")
@@ -196,9 +204,16 @@ if input_mode == "Upload CV" and cv_text:
 
     if extracted_skill_matches:
         st.markdown("**Detected Skills from CV**")
-        for skill, matched_term in extracted_skill_matches:
-            display_term = matched_term if matched_term.lower() != skill.lower() else skill
-            st.write(f"- {skill} _(matched from: {display_term})_")
+        detected_only = []
+        seen = set()
+
+    for skill, _ in extracted_skill_matches:
+        if skill not in seen:
+            detected_only.append(skill)
+            seen.add(skill)
+
+    for skill in detected_only:
+        st.write(f"- {skill}")      
 
     with st.expander("Preview extracted CV text"):
         st.text_area("CV text", cv_text[:5000], height=220)

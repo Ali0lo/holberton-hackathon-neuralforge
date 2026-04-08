@@ -374,11 +374,21 @@ def _estimate_months_to_ready(readiness_score: float, hours_per_week: int) -> in
     return max(1, int(np.ceil(gap / gain)))
 
 
-def _reality_verdict(readiness_score: float, estimated_months: int) -> str:
-    if readiness_score >= 75 and estimated_months <= 3:
+def _reality_verdict(
+    readiness_score: float,
+    estimated_months: int,
+    matched_skills_count: int,
+    bottlenecks_count: int,
+) -> str:
+    if readiness_score >= 85 and estimated_months <= 2 and bottlenecks_count <= 2:
+        return "Highly Ready"
+
+    if readiness_score >= 70 and estimated_months <= 4 and bottlenecks_count <= 4:
         return "Feasible"
-    if readiness_score >= 45 and estimated_months <= 6:
+
+    if readiness_score >= 45 and estimated_months <= 8 and matched_skills_count >= 3:
         return "Stretch"
+
     return "Unrealistic"
 
 
@@ -490,7 +500,12 @@ def build_strategy(
     )
 
     estimated_months = _estimate_months_to_ready(readiness_score, hours_per_week)
-    verdict = _reality_verdict(readiness_score, estimated_months)
+    verdict = _reality_verdict(
+    readiness_score=readiness_score,
+    estimated_months=estimated_months,
+    matched_skills_count=len(matched_skills),
+    bottlenecks_count=len(bottlenecks),
+)
     fastest_role, _ = _find_fastest_role(role_df, user_skills)
     compressed_path = _build_compressed_path(target_role, fastest_role)
 
