@@ -45,6 +45,42 @@ def parse_user_skills(raw_text: str) -> list[str]:
     return [s.strip() for s in raw_text.split(",") if s.strip()]
 
 
+def build_compact_roadmap(base_roadmap: dict, total_weeks: int) -> list[tuple[str, list[str]]]:
+    """
+    Expands the 4-phase roadmap into N weeks, then compresses consecutive
+    identical phases into intervals like 'Week 1-4'.
+    """
+    if not base_roadmap:
+        return []
+
+    phase_tasks = list(base_roadmap.values())
+    num_phases = len(phase_tasks)
+    total_weeks = max(1, int(total_weeks))
+
+    expanded = []
+    for week_idx in range(total_weeks):
+        phase_idx = min((week_idx * num_phases) // total_weeks, num_phases - 1)
+        expanded.append(phase_tasks[phase_idx])
+
+    compact = []
+    start_week = 1
+    current_tasks = expanded[0]
+
+    for i in range(1, total_weeks):
+        if expanded[i] != current_tasks:
+            end_week = i
+            label = f"Week {start_week}" if start_week == end_week else f"Week {start_week}-{end_week}"
+            compact.append((label, current_tasks))
+            start_week = i + 1
+            current_tasks = expanded[i]
+
+    end_week = total_weeks
+    label = f"Week {start_week}" if start_week == end_week else f"Week {start_week}-{end_week}"
+    compact.append((label, current_tasks))
+
+    return compact
+
+
 st.title("🚀 RoleForge — Career Reality Simulator")
 st.caption("Constraint-aware career planning. Honest outcomes.")
 
@@ -258,9 +294,15 @@ if recommended_courses:
 else:
     st.write("No course recommendations found.")
 
-st.subheader("🗓️ 4-Week Roadmap")
-for week, tasks in strategy.roadmap.items():
-    st.markdown(f"**{week}**")
+st.subheader("🗓️ Roadmap")
+
+total_weeks = user_estimated_months * 4
+compact_roadmap = build_compact_roadmap(strategy.roadmap, total_weeks)
+
+st.caption(f"Generated for **{total_weeks} weeks** based on your selected timeframe.")
+
+for interval, tasks in compact_roadmap:
+    st.markdown(f"**{interval}**")
     for task in tasks:
         st.write(f"- {task}")
 
