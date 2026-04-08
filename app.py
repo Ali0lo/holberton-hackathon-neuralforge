@@ -53,9 +53,10 @@ def parse_user_skills(raw_text: str) -> list[str]:
 
 
 def format_role_name(role: str) -> str:
-    special_map = {
-        "mlops": "MLOps",
+    special_words = {
         "ai": "AI",
+        "ml": "ML",
+        "mlops": "MLOps",
         "soc": "SOC",
         "llm": "LLM",
         "nlp": "NLP",
@@ -65,6 +66,24 @@ def format_role_name(role: str) -> str:
         "ux": "UX",
         "ci/cd": "CI/CD",
     }
+
+    words = str(role).split()
+    formatted = []
+
+    for word in words:
+        lw = word.lower()
+
+        # exact special word match
+        if lw in special_words:
+            formatted.append(special_words[lw])
+        else:
+            # keep "machine learning" nice
+            if lw == "learning":
+                formatted.append("Learning")
+            else:
+                formatted.append(word.capitalize())
+
+    return " ".join(formatted)
 
     words = str(role).split()
     formatted = []
