@@ -22,6 +22,7 @@ from roleforge.cv_parser import (
     extract_skill_matches_from_text,
     extract_skills_from_text,
 )
+from roleforge.report_export import build_roleforge_report_pdf
 
 
 @st.cache_data
@@ -127,6 +128,8 @@ user_estimated_months = st.sidebar.slider(
 use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
 use_llm_skill_mapping = st.sidebar.checkbox("Use LLM skill mapping", value=False)
 
+st.sidebar.caption("📎 Max CV upload size: 5MB")
+
 if input_mode == "Manual input":
     user_skills_text = st.sidebar.text_area(
         "Current skills (comma-separated)",
@@ -158,6 +161,10 @@ else:
     )
 
     if uploaded_file is not None:
+        if uploaded_file.size > 5 * 1024 * 1024:
+            st.error("File too large. Max size is 5MB.")
+            st.stop()
+
         try:
             cv_text = extract_text_from_uploaded_file(uploaded_file)
             extracted_skill_matches = extract_skill_matches_from_text(cv_text, role_df)
@@ -187,7 +194,6 @@ else:
 run_simulation = st.sidebar.button("Run simulation", use_container_width=True)
 
 if not run_simulation:
-    st.info("Enter your skills, choose a target role, and run the simulation.")
     st.stop()
 
 if not user_skills:
@@ -197,28 +203,21 @@ if not user_skills:
         st.warning("Please enter at least one skill.")
     st.stop()
 
-try:
-    strategy = build_strategy(
-        role_df=role_df,
-        user_skills=user_skills,
-        target_role=target_role,
-        hours_per_week=hours_per_week,
-    )
-except Exception as e:
-    st.error(f"Strategy engine failed: {e}")
-    st.stop()
+strategy = build_strategy(
+    role_df=role_df,
+    user_skills=user_skills,
+    target_role=target_role,
+    hours_per_week=hours_per_week,
+)
 
-try:
-    recommended_courses = recommend_courses(
-        strategy.bottlenecks,
-        course_df,
-        max_courses=3,
-        use_live_search=False,
-        use_llm_rerank=False,
-        target_role=target_role,
-    )
-except Exception:
-    recommended_courses = []
+recommended_courses = recommend_courses(
+    strategy.bottlenecks,
+    course_df,
+    max_courses=3,
+    use_live_search=False,
+    use_llm_rerank=False,
+    target_role=target_role,
+)
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Readiness", f"{strategy.readiness_score:.1f}%")
@@ -385,6 +384,28 @@ for interval, tasks in compact_roadmap:
     st.markdown(f"**{interval}**")
     for task in tasks:
         st.write(f"- {task}")
+
+st.subheader("📄 Export Report")
+pdf_bytes = build_roleforge_report_pdf(
+    target_role=target_role,
+    user_skills=user_skills,
+    readiness_score=strategy.readiness_score,
+    reality_verdict=strategy.reality_verdict,
+    fastest_role=strategy.fastest_role,
+    confidence=strategy.confidence,
+    estimated_months_to_ready=strategy.estimated_months_to_ready,
+    matched_skills=strategy.matched_skills,
+    bottlenecks=strategy.bottlenecks,
+    roadmap=compact_roadmap,
+)
+
+st.download_button(
+    label="Download PDF Report",
+    data=pdf_bytes,
+    file_name="roleforge_report.pdf",
+    mime="application/pdf",
+    use_container_width=True,
+)
 
 with st.expander("Technical summary"):
     st.write("User skills:", user_skills)
