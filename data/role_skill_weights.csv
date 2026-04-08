@@ -1,126 +1,96 @@
 role,skill,weight
-AI Engineer,Python,5.0
-AI Engineer,Machine Learning,5.0
-AI Engineer,Deep Learning,4.8
-AI Engineer,Large Language Models,4.8
-AI Engineer,Natural Language Processing,4.5
-AI Engineer,PyTorch,4.5
-AI Engineer,TensorFlow,4.2
-AI Engineer,APIs,4.0
-AI Engineer,Git,3.5
-AI Engineer,Docker,3.5
-AI Engineer,Vector Databases,3.8
-AI Engineer,RAG,4.2
-ML Engineer,Python,5.0
-ML Engineer,Machine Learning,5.0
-ML Engineer,Deep Learning,4.6
-ML Engineer,Scikit-learn,4.5
-ML Engineer,PyTorch,4.4
-ML Engineer,TensorFlow,4.2
-ML Engineer,NumPy,4.2
-ML Engineer,Pandas,4.0
-ML Engineer,Statistics,4.3
-ML Engineer,SQL,3.8
-ML Engineer,MLOps,4.0
-ML Engineer,Docker,3.5
-ML Engineer,Git,3.2
-Deep Learning Engineer,Python,5.0
-Deep Learning Engineer,Deep Learning,5.0
-Deep Learning Engineer,PyTorch,4.8
-Deep Learning Engineer,TensorFlow,4.6
-Deep Learning Engineer,Machine Learning,4.2
-Deep Learning Engineer,NumPy,4.0
-Deep Learning Engineer,Computer Vision,4.2
-Deep Learning Engineer,Natural Language Processing,4.2
-Deep Learning Engineer,Git,3.0
-Deep Learning Engineer,Docker,3.2
-Data Scientist,Python,5.0
-Data Scientist,Statistics,5.0
-Data Scientist,Machine Learning,4.6
-Data Scientist,Pandas,4.5
-Data Scientist,NumPy,4.4
-Data Scientist,SQL,4.2
-Data Scientist,Data Visualization,4.2
-Data Scientist,Scikit-learn,4.3
-Data Scientist,Experimentation,3.8
-Data Scientist,Feature Engineering,4.0
-Data Analyst,SQL,5.0
-Data Analyst,Excel,5.0
-Data Analyst,Python,4.0
-Data Analyst,Pandas,4.0
-Data Analyst,Data Visualization,4.5
-Data Analyst,Statistics,3.8
-Data Analyst,BI Tools,4.2
-Data Analyst,Dashboarding,4.4
-Data Engineer,Python,4.5
-Data Engineer,SQL,5.0
-Data Engineer,ETL,4.8
-Data Engineer,Data Warehousing,4.5
-Data Engineer,Apache Spark,4.4
-Data Engineer,Airflow,4.2
-Data Engineer,Cloud,4.0
-Data Engineer,Docker,3.6
-Data Engineer,Git,3.2
-MLOps Engineer,Python,4.4
-MLOps Engineer,MLOps,5.0
-MLOps Engineer,Docker,4.8
-MLOps Engineer,Kubernetes,4.5
-MLOps Engineer,CI/CD,4.3
-MLOps Engineer,Cloud,4.2
-MLOps Engineer,Monitoring,4.0
-MLOps Engineer,Git,3.8
-MLOps Engineer,APIs,3.5
-Software Engineer,Python,4.2
-Software Engineer,JavaScript,4.0
-Software Engineer,Git,4.5
-Software Engineer,APIs,4.2
-Software Engineer,Docker,3.8
-Software Engineer,SQL,3.6
-Software Engineer,Data Structures,4.3
-Software Engineer,Algorithms,4.3
-Software Engineer,System Design,4.0
-Frontend Developer,HTML,5.0
-Frontend Developer,CSS,5.0
-Frontend Developer,JavaScript,5.0
-Frontend Developer,React,4.6
-Frontend Developer,Git,3.8
-Frontend Developer,APIs,3.8
-Frontend Developer,UI/UX,4.0
-Backend Developer,Python,4.5
-Backend Developer,Java,4.0
-Backend Developer,Node.js,4.0
-Backend Developer,APIs,5.0
-Backend Developer,SQL,4.5
-Backend Developer,Docker,3.8
-Backend Developer,Git,4.0
-Backend Developer,System Design,4.0
-Cybersecurity Engineer,Networking,5.0
-Cybersecurity Engineer,Linux,5.0
-Cybersecurity Engineer,Python,4.0
-Cybersecurity Engineer,Security Fundamentals,5.0
-Cybersecurity Engineer,SIEM,4.2
-Cybersecurity Engineer,Cloud,3.8
-Cybersecurity Engineer,Git,2.8
-Cybersecurity Engineer,Incident Response,4.2
-QA Engineer,Testing,5.0
-QA Engineer,Automation Testing,4.8
-QA Engineer,Python,3.8
-QA Engineer,Selenium,4.4
-QA Engineer,API Testing,4.2
-QA Engineer,Git,3.4
-QA Engineer,CI/CD,3.6
-Systems Analyst,SQL,4.2
-Systems Analyst,Business Analysis,5.0
-Systems Analyst,Requirements Gathering,4.8
-Systems Analyst,Process Modeling,4.2
-Systems Analyst,Documentation,4.0
-Systems Analyst,Stakeholder Communication,4.0
-AI Research Scientist,Python,5.0
-AI Research Scientist,Machine Learning,5.0
-AI Research Scientist,Deep Learning,5.0
-AI Research Scientist,PyTorch,4.8
-AI Research Scientist,TensorFlow,4.4
-AI Research Scientist,Mathematics,4.8
-AI Research Scientist,Research,4.6
-AI Research Scientist,Experimentation,4.2
-AI Research Scientist,Large Language Models,4.4
+machine learning engineer,python,5
+machine learning engineer,machine learning,5
+machine learning engineer,pytorch,4
+machine learning engineer,data preprocessing,4
+machine learning engineer,statistics,3
+
+ai engineer,python,5
+ai engineer,deep learning,5
+ai engineer,transformers,4
+ai engineer,mlops,3
+ai engineer,large language models,4
+
+data scientist,python,5
+data scientist,statistics,5
+data scientist,sql,4
+data scientist,data visualization,4
+data scientist,machine learning,4
+
+data analyst,sql,5
+data analyst,excel,5
+data analyst,data visualization,4
+data analyst,tableau,4
+data analyst,statistics,3
+
+backend engineer,python,5
+backend engineer,apis,5
+backend engineer,databases,4
+backend engineer,system design,4
+backend engineer,docker,3
+
+frontend engineer,javascript,5
+frontend engineer,react,5
+frontend engineer,css,4
+frontend engineer,html,4
+frontend engineer,web development,4
+
+full stack engineer,python,4
+full stack engineer,react,4
+full stack engineer,databases,4
+full stack engineer,apis,4
+full stack engineer,javascript,4
+
+devops engineer,docker,5
+devops engineer,kubernetes,5
+devops engineer,ci/cd,5
+devops engineer,linux,4
+devops engineer,cloud computing,4
+
+cloud engineer,aws,5
+cloud engineer,terraform,4
+cloud engineer,networking,4
+cloud engineer,linux,4
+cloud engineer,cloud security,3
+
+cybersecurity analyst,network security,4
+cybersecurity analyst,incident response,4
+cybersecurity analyst,siem,4
+cybersecurity analyst,linux,3
+cybersecurity analyst,threat analysis,4
+
+soc analyst,siem,5
+soc analyst,log analysis,5
+soc analyst,incident response,4
+soc analyst,network security,3
+soc analyst,threat detection,4
+
+cybersecurity engineer,network security,5
+cybersecurity engineer,cloud security,4
+cybersecurity engineer,firewalls,4
+cybersecurity engineer,linux,3
+cybersecurity engineer,security architecture,4
+
+penetration tester,penetration testing,5
+penetration tester,web security,5
+penetration tester,owasp,5
+penetration tester,python,3
+penetration tester,linux,3
+
+software engineer,python,5
+software engineer,data structures,5
+software engineer,algorithms,5
+software engineer,system design,4
+software engineer,git,4
+
+data engineer,python,5
+data engineer,sql,5
+data engineer,etl,5
+data engineer,data pipelines,5
+data engineer,spark,4
+
+mlops engineer,mlops,5
+mlops engineer,docker,5
+mlops engineer,kubernetes,5
+mlops engineer,python,4
+mlops engineer,cloud computing,4
