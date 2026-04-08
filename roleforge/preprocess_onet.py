@@ -10,7 +10,6 @@ OCC_FILE = DATA_DIR / "Occupation Data.xlsx"
 OUTPUT_FILE = DATA_DIR / "role_skill_weights.csv"
 
 
-# Official O*NET titles -> cleaner aliases for demo/app usage
 ROLE_ALIAS_MAP: Dict[str, str] = {
     "Business Intelligence Analysts": "Data Analyst",
     "Data Scientists": "Data Scientist",
@@ -28,7 +27,6 @@ ROLE_ALIAS_MAP: Dict[str, str] = {
 }
 
 
-# Synthetic hackathon-friendly roles built from one or more O*NET roles
 SYNTHETIC_ROLE_SOURCES: Dict[str, List[str]] = {
     "AI Engineer": [
         "Computer and Information Research Scientists",
@@ -73,6 +71,24 @@ SYNTHETIC_ROLE_SOURCES: Dict[str, List[str]] = {
 }
 
 
+APP_ROLE_ORDER = [
+    "Software Engineer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Data Analyst",
+    "Data Scientist",
+    "Data Engineer",
+    "AI Engineer",
+    "ML Engineer",
+    "Deep Learning Engineer",
+    "Cybersecurity Engineer",
+    "QA Engineer",
+    "Systems Analyst",
+    "Systems Engineer",
+    "AI / ML Research Scientist",
+]
+
+
 def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df.columns = [str(c).strip() for c in df.columns]
@@ -104,7 +120,6 @@ def validate_input_columns(skills_df: pd.DataFrame, occ_df: pd.DataFrame) -> Non
 
 
 def build_base_dataset(skills_df: pd.DataFrame, occ_df: pd.DataFrame) -> pd.DataFrame:
-    # Keep only importance rows for a cleaner role-skill weight table
     skills_df = skills_df[
         skills_df["Scale Name"].astype(str).str.strip().str.lower() == "importance"
     ].copy()
@@ -190,7 +205,7 @@ def finalize_dataset(base_df: pd.DataFrame) -> pd.DataFrame:
     alias_df = build_alias_roles(base_df)
     synthetic_df = build_synthetic_roles(base_df)
 
-    final_df = pd.concat([base_df, alias_df, synthetic_df], ignore_index=True)
+    final_df = pd.concat([alias_df, synthetic_df], ignore_index=True)
 
     final_df = (
         final_df.groupby(["role", "skill"], as_index=False)["weight"]
@@ -198,6 +213,10 @@ def finalize_dataset(base_df: pd.DataFrame) -> pd.DataFrame:
         .sort_values(["role", "weight"], ascending=[True, False])
         .reset_index(drop=True)
     )
+
+    final_df = final_df[final_df["role"].isin(APP_ROLE_ORDER)].copy()
+    final_df["role"] = pd.Categorical(final_df["role"], categories=APP_ROLE_ORDER, ordered=True)
+    final_df = final_df.sort_values(["role", "weight"], ascending=[True, False]).reset_index(drop=True)
 
     return final_df
 
@@ -226,8 +245,8 @@ def main() -> None:
     print(f"Rows: {len(final_df)}")
     print(f"Roles: {final_df['role'].nunique()}")
     print(f"Skills: {final_df['skill'].nunique()}")
-    print("\nSample roles:")
-    print(final_df["role"].drop_duplicates().head(40).tolist())
+    print("\nRoles:")
+    print(final_df["role"].drop_duplicates().tolist())
 
 
 if __name__ == "__main__":

@@ -11,12 +11,26 @@ SKILL_ALIASES = {
     "ml": "machine learning",
     "machine-learning": "machine learning",
     "machine_learning": "machine learning",
+    "supervised learning": "machine learning",
+    "unsupervised learning": "machine learning",
+    "reinforcement learning": "machine learning",
+    "classical machine learning": "machine learning",
+    "predictive modeling": "machine learning",
+    "model training": "machine learning",
+    "model evaluation": "machine learning",
     "ai": "artificial intelligence",
     "dl": "deep learning",
     "deep-learning": "deep learning",
     "deep_learning": "deep learning",
+    "neural networks": "deep learning",
+    "neural network": "deep learning",
+    "cnn": "deep learning",
+    "rnn": "deep learning",
     "llm": "large language models",
     "llms": "large language models",
+    "transformers": "large language models",
+    "transformer models": "large language models",
+    "prompt engineering": "large language models",
     "nlp": "natural language processing",
     "cv": "computer vision",
     "torch": "pytorch",
@@ -109,6 +123,7 @@ def canonicalize_display_skill(skill: str) -> str:
         "system design": "System Design",
         "feature engineering": "Feature Engineering",
         "data visualization": "Data Visualization",
+        "monitoring": "Monitoring",
     }
     return mapping.get(normalize_skill(skill), skill)
 
@@ -116,7 +131,12 @@ def canonicalize_display_skill(skill: str) -> str:
 ROLE_BUCKETS = {
     "AI Engineer": {
         "foundation": ["python", "git", "apis"],
-        "core": ["machine learning", "deep learning", "large language models", "natural language processing"],
+        "core": [
+            "machine learning",
+            "deep learning",
+            "large language models",
+            "natural language processing",
+        ],
         "advanced": ["pytorch", "tensorflow", "vector databases", "rag", "docker"],
     },
     "ML Engineer": {
@@ -223,8 +243,14 @@ def _bucket_based_readiness(
     target_df["skill_norm"] = target_df["skill"].apply(normalize_skill)
 
     normalized_user_skills = {normalize_skill(skill) for skill in user_skills}
-    role_weights = {normalize_skill(row["skill"]): float(row["weight"]) for _, row in target_df.iterrows()}
-    role_display = {normalize_skill(row["skill"]): str(row["skill"]) for _, row in target_df.iterrows()}
+    role_weights = {
+        normalize_skill(row["skill"]): float(row["weight"])
+        for _, row in target_df.iterrows()
+    }
+    role_display = {
+        normalize_skill(row["skill"]): str(row["skill"])
+        for _, row in target_df.iterrows()
+    }
 
     if target_role in ROLE_BUCKETS:
         buckets = ROLE_BUCKETS[target_role]
@@ -240,17 +266,30 @@ def _bucket_based_readiness(
     else:
         total_weight = float(target_df["weight"].sum())
         matched_weight = float(
-            target_df[target_df["skill_norm"].isin(normalized_user_skills)]["weight"].sum()
+            target_df[target_df["skill_norm"].isin(normalized_user_skills)][
+                "weight"
+            ].sum()
         )
-        readiness_score = 0.0 if total_weight <= 0 else (matched_weight / total_weight) * 100.0
+        readiness_score = (
+            0.0 if total_weight <= 0 else (matched_weight / total_weight) * 100.0
+        )
 
     matched_norm = [s for s in role_weights.keys() if s in normalized_user_skills]
-    matched_skills = [canonicalize_display_skill(role_display.get(s, s)) for s in matched_norm]
+    matched_skills = [
+        canonicalize_display_skill(role_display.get(s, s)) for s in matched_norm
+    ]
 
     missing = []
     for skill_norm, weight in role_weights.items():
         if skill_norm not in normalized_user_skills:
-            missing.append((canonicalize_display_skill(role_display.get(skill_norm, skill_norm)), weight))
+            missing.append(
+                (
+                    canonicalize_display_skill(
+                        role_display.get(skill_norm, skill_norm)
+                    ),
+                    weight,
+                )
+            )
 
     missing.sort(key=lambda x: x[1], reverse=True)
 
@@ -258,7 +297,9 @@ def _bucket_based_readiness(
 
 
 def _build_skill_space(role_df: pd.DataFrame) -> Dict[str, int]:
-    skills = sorted(role_df["skill"].astype(str).apply(normalize_skill).dropna().unique().tolist())
+    skills = sorted(
+        role_df["skill"].astype(str).apply(normalize_skill).dropna().unique().tolist()
+    )
     return {skill: idx for idx, skill in enumerate(skills)}
 
 
@@ -271,7 +312,9 @@ def _build_user_vector(user_skills: List[str], skill_index: Dict[str, int]) -> n
     return vec
 
 
-def _build_role_vector(role_df: pd.DataFrame, role_name: str, skill_index: Dict[str, int]) -> np.ndarray:
+def _build_role_vector(
+    role_df: pd.DataFrame, role_name: str, skill_index: Dict[str, int]
+) -> np.ndarray:
     vec = np.zeros(len(skill_index), dtype=float)
     df = _get_role_df(role_df, role_name).copy()
     for _, row in df.iterrows():
@@ -347,7 +390,9 @@ def _confidence_label(num_user_skills: int, num_role_skills: int) -> str:
     return "Low"
 
 
-def _project_readiness_curve(current_readiness: float, hours_per_week: int, months: int) -> float:
+def _project_readiness_curve(
+    current_readiness: float, hours_per_week: int, months: int
+) -> float:
     effort = max(1, hours_per_week)
     growth_rate = 0.08 + (effort / 200.0)
     remaining_gap = max(0.0, 100.0 - current_readiness)
@@ -363,7 +408,9 @@ def _what_if_projection(readiness_score: float) -> Dict[int, float]:
     }
 
 
-def _build_projection_series(current_readiness: float, hours_per_week: int, months: int = 6) -> List[Dict[str, float]]:
+def _build_projection_series(
+    current_readiness: float, hours_per_week: int, months: int = 6
+) -> List[Dict[str, float]]:
     rows = []
     for month in range(1, months + 1):
         projected = _project_readiness_curve(current_readiness, hours_per_week, month)
@@ -427,7 +474,9 @@ def build_strategy(
     required_columns = {"role", "skill", "weight"}
     missing_columns = required_columns - set(role_df.columns)
     if missing_columns:
-        raise ValueError(f"role dataframe is missing columns: {sorted(missing_columns)}")
+        raise ValueError(
+            f"role dataframe is missing columns: {sorted(missing_columns)}"
+        )
 
     role_df = role_df.copy()
     role_df["role"] = role_df["role"].astype(str).str.strip()
@@ -459,5 +508,7 @@ def build_strategy(
         compressed_path=compressed_path,
         what_if_projections=_what_if_projection(readiness_score),
         roadmap=_build_roadmap(bottlenecks),
-        projection_series=_build_projection_series(readiness_score, hours_per_week, months=6),
+        projection_series=_build_projection_series(
+            readiness_score, hours_per_week, months=6
+        ),
     )

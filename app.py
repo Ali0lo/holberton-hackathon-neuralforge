@@ -12,7 +12,10 @@ import plotly.express as px
 from roleforge.recommender import load_course_catalog, recommend_courses
 from roleforge.strategy import build_strategy
 from roleforge.llm_helper import generate_roleforge_explanation, generate_cv_overview
-from roleforge.cv_parser import extract_text_from_uploaded_file, extract_skills_from_text, extract_skill_matches_from_text
+from roleforge.cv_parser import (
+    extract_text_from_uploaded_file,
+    extract_skill_matches_from_text,
+)
 
 
 @st.cache_data
@@ -22,7 +25,9 @@ def load_role_data(path: str) -> pd.DataFrame:
     required_columns = {"role", "skill", "weight"}
     missing_columns = required_columns - set(df.columns)
     if missing_columns:
-        raise ValueError(f"role_skill_weights.csv is missing required columns: {missing_columns}")
+        raise ValueError(
+            f"role_skill_weights.csv is missing required columns: {missing_columns}"
+        )
 
     df["role"] = df["role"].astype(str).str.strip()
     df["skill"] = df["skill"].astype(str).str.strip()
@@ -61,6 +66,7 @@ input_mode = st.sidebar.radio("Skill input mode", ["Manual input", "Upload CV"])
 
 cv_text = ""
 extracted_skill_matches = []
+user_skills = []
 
 if input_mode == "Manual input":
     user_skills_text = st.sidebar.text_area(
@@ -69,6 +75,7 @@ if input_mode == "Manual input":
         height=140,
     )
     user_skills = parse_user_skills(user_skills_text)
+
 else:
     uploaded_file = st.sidebar.file_uploader(
         "Upload CV",
@@ -80,7 +87,6 @@ else:
         placeholder="rag, vector databases",
         height=100,
     )
-    user_skills = []
 
     if uploaded_file is not None:
         try:
@@ -94,7 +100,9 @@ else:
             st.stop()
 
 hours_per_week = st.sidebar.slider("Hours per week", 1, 40, 8, 1)
-user_estimated_months = st.sidebar.slider("How many months do you think it will take?", 1, 24, 3, 1)
+user_estimated_months = st.sidebar.slider(
+    "How many months do you think it will take?", 1, 24, 3, 1
+)
 use_live_course_search = st.sidebar.checkbox("Use live course search", value=False)
 use_local_llm = st.sidebar.checkbox("Use local LLM explanation", value=False)
 
@@ -184,7 +192,9 @@ elif gap < 0:
         f"**{strategy.estimated_months_to_ready} months**."
     )
 else:
-    st.info(f"Your estimate matches the simulator: **{strategy.estimated_months_to_ready} months**.")
+    st.info(
+        f"Your estimate matches the simulator: **{strategy.estimated_months_to_ready} months**."
+    )
 
 left, right = st.columns(2)
 
@@ -212,7 +222,6 @@ else:
     st.success("Your target role is already the best current path.")
 
 st.subheader("📈 Learning Curve")
-
 curve_df = pd.DataFrame(strategy.projection_series)
 fig_curve = px.line(
     curve_df,
@@ -225,7 +234,10 @@ st.plotly_chart(fig_curve, use_container_width=True)
 
 st.subheader("📈 What-if Simulation")
 proj_df = pd.DataFrame(
-    [{"Hours per week": h, "Projected readiness": s} for h, s in strategy.what_if_projections.items()]
+    [
+        {"Hours per week": h, "Projected readiness": s}
+        for h, s in strategy.what_if_projections.items()
+    ]
 ).sort_values("Hours per week")
 
 fig = px.bar(
@@ -259,4 +271,4 @@ with st.expander("Technical summary"):
     st.write("Loaded roles:", roles)
     st.write("Input mode:", input_mode)
     st.write("CV skill matches:", extracted_skill_matches)
-    st.write("Strategy:", strategy)s
+    st.write("Strategy:", strategy)

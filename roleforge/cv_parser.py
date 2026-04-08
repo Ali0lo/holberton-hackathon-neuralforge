@@ -1,6 +1,6 @@
 import re
 from io import BytesIO
-from typing import List, Set
+from typing import List, Set, Tuple
 
 import pandas as pd
 from PyPDF2 import PdfReader
@@ -52,10 +52,34 @@ def extract_text_from_uploaded_file(uploaded_file) -> str:
 def build_skill_aliases() -> dict:
     return {
         "python": ["python", "py", "python3"],
-        "machine learning": ["machine learning", "ml"],
+        "machine learning": [
+            "machine learning",
+            "ml",
+            "supervised learning",
+            "unsupervised learning",
+            "reinforcement learning",
+            "classical machine learning",
+            "predictive modeling",
+            "model training",
+            "model evaluation",
+        ],
         "artificial intelligence": ["artificial intelligence", "ai"],
-        "deep learning": ["deep learning", "dl"],
-        "large language models": ["large language models", "llm", "llms"],
+        "deep learning": [
+            "deep learning",
+            "dl",
+            "neural networks",
+            "neural network",
+            "cnn",
+            "rnn",
+        ],
+        "large language models": [
+            "large language models",
+            "llm",
+            "llms",
+            "transformers",
+            "transformer models",
+            "prompt engineering",
+        ],
         "natural language processing": ["natural language processing", "nlp"],
         "computer vision": ["computer vision", "cv"],
         "pytorch": ["pytorch", "torch"],
@@ -113,7 +137,7 @@ def build_skill_aliases() -> dict:
     }
 
 
-def extract_skills_from_text(text: str, role_df: pd.DataFrame) -> List[str]:
+def extract_skill_matches_from_text(text: str, role_df: pd.DataFrame) -> List[Tuple[str, str]]:
     normalized_text = f" {_normalize_text(text)} "
     aliases = build_skill_aliases()
 
@@ -121,7 +145,8 @@ def extract_skills_from_text(text: str, role_df: pd.DataFrame) -> List[str]:
         str(skill).strip().lower() for skill in role_df["skill"].dropna().unique().tolist()
     }
 
-    found = set()
+    found = []
+    seen = set()
 
     for skill in dataset_skills:
         candidate_terms = aliases.get(skill, [skill])
@@ -130,7 +155,15 @@ def extract_skills_from_text(text: str, role_df: pd.DataFrame) -> List[str]:
             term_norm = _normalize_text(term)
             pattern = rf"(?<![a-z0-9]){re.escape(term_norm)}(?![a-z0-9])"
             if re.search(pattern, normalized_text):
-                found.add(skill)
+                key = (skill, term)
+                if key not in seen:
+                    found.append((skill, term))
+                    seen.add(key)
                 break
 
-    return sorted(found)
+    return sorted(found, key=lambda x: x[0])
+
+
+def extract_skills_from_text(text: str, role_df: pd.DataFrame) -> List[str]:
+    matches = extract_skill_matches_from_text(text, role_df)
+    return sorted({skill for skill, _ in matches})

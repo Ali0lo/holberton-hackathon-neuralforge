@@ -45,3 +45,42 @@ Requirements:
         return data.get("response", "").strip()
     except Exception:
         return ""
+
+
+def generate_cv_overview(
+    cv_text: str,
+    extracted_skills: list[str],
+    target_role: str,
+) -> str:
+    prompt = f"""
+You are an honest career assistant.
+Write a short CV overview for a user applying toward {target_role}.
+
+Extracted skills: {", ".join(extracted_skills)}
+CV text:
+{cv_text[:5000]}
+
+Requirements:
+- max 140 words
+- summarize the candidate profile briefly
+- mention 2 strengths
+- mention 1 gap relative to the target role
+- be direct and practical
+- do not invent experience that is not in the CV
+"""
+
+    try:
+        response = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+            },
+            timeout=25,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data.get("response", "").strip()
+    except Exception:
+        return ""
