@@ -1,0 +1,361 @@
+role,skill,count,share
+ai engineer,artificial intelligence,38,0.0275
+ai engineer,machine learning,23,0.0166
+ai engineer,data analysis,17,0.0123
+ai engineer,python,15,0.0109
+ai engineer,natural language processing,10,0.0072
+ai engineer,java,9,0.0065
+ai engineer,project management,9,0.0065
+ai engineer,deep learning,8,0.0058
+ai engineer,scala,8,0.0058
+ai engineer,computer vision,7,0.0051
+ai engineer,data science,7,0.0051
+ai engineer,sql,7,0.0051
+ai engineer,artificial intelligence (ai),6,0.0043
+ai engineer,data mining,6,0.0043
+ai engineer,statistical analysis,6,0.0043
+big data engineer,apache spark,38,0.0199
+big data engineer,python,35,0.0183
+big data engineer,java,30,0.0157
+big data engineer,hive,27,0.0141
+big data engineer,sql,24,0.0126
+big data engineer,hadoop,21,0.011
+big data engineer,scala,21,0.011
+big data engineer,data modeling,17,0.0089
+big data engineer,cloud,16,0.0084
+big data engineer,big data,13,0.0068
+big data engineer,etl,13,0.0068
+big data engineer,kafka,13,0.0068
+big data engineer,data analysis,12,0.0063
+big data engineer,hbase,12,0.0063
+big data engineer,git,10,0.0052
+business analyst,data analysis,41,0.0344
+business analyst,project management,23,0.0193
+business analyst,sql,22,0.0185
+business analyst,business analysis,20,0.0168
+business analyst,requirements gathering,14,0.0118
+business analyst,excel,12,0.0101
+business analyst,process improvement,9,0.0076
+business analyst,reporting,9,0.0076
+business analyst,analytical skills,8,0.0067
+business analyst,dashboarding,8,0.0067
+business analyst,documentation,8,0.0067
+business analyst,user acceptance testing,8,0.0067
+business analyst,microsoft excel,7,0.0059
+business analyst,systems analysis,7,0.0059
+business analyst,application development,5,0.0042
+business intelligence analyst,data analysis,45,0.0332
+business intelligence analyst,sql,43,0.0318
+business intelligence analyst,business intelligence,30,0.0222
+business intelligence analyst,dashboarding,23,0.017
+business intelligence analyst,excel,20,0.0148
+business intelligence analyst,data modeling,17,0.0126
+business intelligence analyst,data visualization,12,0.0089
+business intelligence analyst,microsoft excel,12,0.0089
+business intelligence analyst,project management,12,0.0089
+business intelligence analyst,reporting,11,0.0081
+business intelligence analyst,business analysis,10,0.0074
+business intelligence analyst,database management,10,0.0074
+business intelligence analyst,business intelligence tools,9,0.0066
+business intelligence analyst,python,9,0.0066
+business intelligence analyst,sas,9,0.0066
+cloud engineer,java,46,0.0129
+cloud engineer,javascript,42,0.0117
+cloud engineer,python,32,0.009
+cloud engineer,cloud computing,23,0.0064
+cloud engineer,cloud,21,0.0059
+cloud engineer,css,18,0.005
+cloud engineer,project management,18,0.005
+cloud engineer,devops,17,0.0048
+cloud engineer,git,17,0.0048
+cloud engineer,sql,17,0.0048
+cloud engineer,apis,15,0.0042
+cloud engineer,html,15,0.0042
+cloud engineer,docker,14,0.0039
+cloud engineer,software development,14,0.0039
+cloud engineer,troubleshooting,13,0.0036
+data analyst,data analysis,73,0.0621
+data analyst,sql,37,0.0315
+data analyst,data visualization,21,0.0179
+data analyst,python,21,0.0179
+data analyst,database management,19,0.0162
+data analyst,excel,19,0.0162
+data analyst,statistical analysis,16,0.0136
+data analyst,dashboarding,13,0.0111
+data analyst,data mining,12,0.0102
+data analyst,data modeling,12,0.0102
+data analyst,data management,11,0.0094
+data analyst,data manipulation,11,0.0094
+data analyst,microsoft excel,10,0.0085
+data analyst,sas,10,0.0085
+data analyst,statistics,10,0.0085
+data and analytics manager,data analysis,39,0.0293
+data and analytics manager,sql,34,0.0256
+data and analytics manager,data analytics,23,0.0173
+data and analytics manager,project management,22,0.0165
+data and analytics manager,data visualization,15,0.0113
+data and analytics manager,python,14,0.0105
+data and analytics manager,excel,13,0.0098
+data and analytics manager,dashboarding,12,0.009
+data and analytics manager,analytics,10,0.0075
+data and analytics manager,sas,10,0.0075
+data and analytics manager,data governance,9,0.0068
+data and analytics manager,data mining,9,0.0068
+data and analytics manager,data modeling,9,0.0068
+data and analytics manager,****,8,0.006
+data and analytics manager,data management,8,0.006
+data architect,sql,28,0.0158
+data architect,data modeling,27,0.0152
+data architect,python,18,0.0101
+data architect,data architecture,17,0.0096
+data architect,data governance,16,0.009
+data architect,data analysis,15,0.0084
+data architect,data integration,15,0.0084
+data architect,apache spark,14,0.0079
+data architect,data management,12,0.0068
+data architect,hadoop,12,0.0068
+data architect,java,10,0.0056
+data architect,cloud,9,0.0051
+data architect,data warehousing,9,0.0051
+data architect,****,8,0.0045
+data architect,dashboarding,8,0.0045
+data engineer,python,31,0.02
+data engineer,sql,31,0.02
+data engineer,java,19,0.0122
+data engineer,apache spark,16,0.0103
+data engineer,data modeling,16,0.0103
+data engineer,data analysis,15,0.0097
+data engineer,data engineering,13,0.0084
+data engineer,scala,13,0.0084
+data engineer,etl,11,0.0071
+data engineer,hadoop,10,0.0064
+data engineer,dashboarding,7,0.0045
+data engineer,cloud,6,0.0039
+data engineer,data warehousing,6,0.0039
+data engineer,distributed systems,6,0.0039
+data engineer,hive,6,0.0039
+data quality manager,data analysis,37,0.0298
+data quality manager,quality assurance,17,0.0137
+data quality manager,process improvement,14,0.0113
+data quality manager,data management,13,0.0105
+data quality manager,project management,13,0.0105
+data quality manager,root cause analysis,10,0.008
+data quality manager,quality control,9,0.0072
+data quality manager,****,7,0.0056
+data quality manager,data governance,7,0.0056
+data quality manager,excel,7,0.0056
+data quality manager,communication skills,6,0.0048
+data quality manager,financial analysis,6,0.0048
+data quality manager,microsoft office,6,0.0048
+data quality manager,microsoft office suite,6,0.0048
+data quality manager,microsoft word,6,0.0048
+data scientist,machine learning,51,0.0347
+data scientist,python,46,0.0313
+data scientist,sql,34,0.0231
+data scientist,data analysis,33,0.0225
+data scientist,data science,26,0.0177
+data scientist,data mining,21,0.0143
+data scientist,statistical modeling,17,0.0116
+data scientist,data modeling,16,0.0109
+data scientist,data visualization,15,0.0102
+data scientist,hadoop,15,0.0102
+data scientist,statistical analysis,15,0.0102
+data scientist,apache spark,14,0.0095
+data scientist,predictive modeling,12,0.0082
+data scientist,sas,11,0.0075
+data scientist,dashboarding,10,0.0068
+data visualization expert,data visualization,50,0.0314
+data visualization expert,sql,47,0.0296
+data visualization expert,data analysis,36,0.0226
+data visualization expert,python,32,0.0201
+data visualization expert,machine learning,16,0.0101
+data visualization expert,dashboarding,15,0.0094
+data visualization expert,data modeling,15,0.0094
+data visualization expert,project management,15,0.0094
+data visualization expert,data mining,14,0.0088
+data visualization expert,excel,14,0.0088
+data visualization expert,analytics,10,0.0063
+data visualization expert,apache spark,10,0.0063
+data visualization expert,hadoop,10,0.0063
+data visualization expert,statistical analysis,10,0.0063
+data visualization expert,business intelligence,9,0.0057
+data warehousing,data warehousing,30,0.0229
+data warehousing,data analysis,24,0.0183
+data warehousing,inventory management,20,0.0152
+data warehousing,sql,20,0.0152
+data warehousing,data entry,12,0.0091
+data warehousing,data modeling,12,0.0091
+data warehousing,python,11,0.0084
+data warehousing,dashboarding,10,0.0076
+data warehousing,project management,10,0.0076
+data warehousing,excel,9,0.0069
+data warehousing,business intelligence,8,0.0061
+data warehousing,data visualization,8,0.0061
+data warehousing,data mining,7,0.0053
+data warehousing,etl,7,0.0053
+data warehousing,hadoop,7,0.0053
+database administrator,database administration,26,0.019
+database administrator,database management,23,0.0168
+database administrator,database design,18,0.0132
+database administrator,excel,12,0.0088
+database administrator,performance tuning,12,0.0088
+database administrator,backup and recovery,10,0.0073
+database administrator,data entry,10,0.0073
+database administrator,troubleshooting,10,0.0073
+database administrator,data analysis,9,0.0066
+database administrator,sql,8,0.0058
+database administrator,data modeling,7,0.0051
+database administrator,database security,7,0.0051
+database administrator,oracle,7,0.0051
+database administrator,sql server,7,0.0051
+database administrator,data management,6,0.0044
+deep learning,project management,12,0.0126
+deep learning,data analysis,11,0.0116
+deep learning,customer service,10,0.0105
+deep learning,deep learning,10,0.0105
+deep learning,python,10,0.0105
+deep learning,merchandising,9,0.0095
+deep learning,tensorflow,9,0.0095
+deep learning,****,8,0.0084
+deep learning,c++,7,0.0074
+deep learning,machine learning,7,0.0074
+deep learning,computer vision,6,0.0063
+deep learning,inventory management,6,0.0063
+deep learning,machine learning algorithms,6,0.0063
+deep learning,product knowledge,5,0.0053
+deep learning,stocking merchandise,5,0.0053
+full stack engineer,javascript,53,0.031
+full stack engineer,css,32,0.0187
+full stack engineer,html,29,0.017
+full stack engineer,java,24,0.0141
+full stack engineer,node.js,22,0.0129
+full stack engineer,react,22,0.0129
+full stack engineer,python,20,0.0117
+full stack engineer,html5,19,0.0111
+full stack engineer,mysql,19,0.0111
+full stack engineer,jquery,17,0.01
+full stack engineer,cloud,16,0.0094
+full stack engineer,git,16,0.0094
+full stack engineer,php,15,0.0088
+full stack engineer,sql,15,0.0088
+full stack engineer,angular,12,0.007
+information security analyst,security fundamentals,20,0.0127
+information security analyst,information security,18,0.0114
+information security analyst,data analysis,15,0.0095
+information security analyst,incident response,15,0.0095
+information security analyst,project management,10,0.0063
+information security analyst,vulnerability management,9,0.0057
+information security analyst,risk assessment,7,0.0044
+information security analyst,risk management,7,0.0044
+information security analyst,active directory,6,0.0038
+information security analyst,firewalls,6,0.0038
+information security analyst,risk assessments,6,0.0038
+information security analyst,****,5,0.0032
+information security analyst,compliance monitoring,5,0.0032
+information security analyst,excel,5,0.0032
+information security analyst,ids/ips,5,0.0032
+it consultant,data analysis,20,0.021
+it consultant,project management,19,0.02
+it consultant,sales,11,0.0116
+it consultant,customer service,8,0.0084
+it consultant,marketing,8,0.0084
+it consultant,excel,6,0.0063
+it consultant,powerpoint,6,0.0063
+it consultant,analytical skills,5,0.0053
+it consultant,microsoft office suite,5,0.0053
+it consultant,****,4,0.0042
+it consultant,business analysis,4,0.0042
+it consultant,business development,4,0.0042
+it consultant,customer relationship management,4,0.0042
+it consultant,outlook),4,0.0042
+it consultant,arc,3,0.0032
+it systems administrator,active directory,18,0.0109
+it systems administrator,troubleshooting,16,0.0097
+it systems administrator,project management,11,0.0067
+it systems administrator,system administration,11,0.0067
+it systems administrator,dns,9,0.0055
+it systems administrator,powershell,9,0.0055
+it systems administrator,networking,8,0.0048
+it systems administrator,vmware,8,0.0048
+it systems administrator,windows server,8,0.0048
+it systems administrator,systems administration,7,0.0042
+it systems administrator,dhcp,6,0.0036
+it systems administrator,git,6,0.0036
+it systems administrator,hardware troubleshooting,6,0.0036
+it systems administrator,maintenance,6,0.0036
+it systems administrator,sharepoint,6,0.0036
+machine learning engineer,machine learning,63,0.0393
+machine learning engineer,python,38,0.0237
+machine learning engineer,java,18,0.0112
+machine learning engineer,tensorflow,18,0.0112
+machine learning engineer,c++,15,0.0094
+machine learning engineer,deep learning,15,0.0094
+machine learning engineer,data analysis,14,0.0087
+machine learning engineer,natural language processing,14,0.0087
+machine learning engineer,sql,14,0.0087
+machine learning engineer,data science,13,0.0081
+machine learning engineer,algorithms,11,0.0069
+machine learning engineer,apache spark,11,0.0069
+machine learning engineer,artificial intelligence,11,0.0069
+machine learning engineer,caffe,11,0.0069
+machine learning engineer,computer vision,11,0.0069
+network architect,project management,14,0.0079
+network architect,bgp,13,0.0073
+network architect,ospf,13,0.0073
+network architect,security fundamentals,13,0.0073
+network architect,troubleshooting,12,0.0068
+network architect,network design,10,0.0056
+network architect,python,10,0.0056
+network architect,tcp/ip,8,0.0045
+network architect,networking,7,0.0039
+network architect,firewalls,6,0.0034
+network architect,mpls,6,0.0034
+network architect,qos,6,0.0034
+network architect,routing,6,0.0034
+network architect,network architecture,5,0.0028
+network architect,network engineering,5,0.0028
+statistics,data analysis,32,0.0345
+statistics,database management,20,0.0216
+statistics,data entry,15,0.0162
+statistics,statistics,13,0.014
+statistics,excel,11,0.0119
+statistics,****,9,0.0097
+statistics,sql,9,0.0097
+statistics,statistical analysis,8,0.0086
+statistics,machine learning,7,0.0076
+statistics,customer service,6,0.0065
+statistics,data collection,6,0.0065
+statistics,data management,6,0.0065
+statistics,powerpoint,6,0.0065
+statistics,python,6,0.0065
+statistics,administrative support,5,0.0054
+technical operations,project management,16,0.015
+technical operations,inventory management,10,0.0094
+technical operations,troubleshooting,10,0.0094
+technical operations,data analysis,9,0.0084
+technical operations,data entry,8,0.0075
+technical operations,****,7,0.0065
+technical operations,process improvement,6,0.0056
+technical operations,technical skills:,6,0.0056
+technical operations,excel,5,0.0047
+technical operations,microsoft office suite,5,0.0047
+technical operations,microsoft word,5,0.0047
+technical operations,product knowledge,5,0.0047
+technical operations,cashiering,4,0.0037
+technical operations,customer service,4,0.0037
+technical operations,sql,4,0.0037
+technology integration,project management,14,0.0097
+technology integration,troubleshooting,9,0.0063
+technology integration,data analysis,6,0.0042
+technology integration,excel,6,0.0042
+technology integration,documentation,5,0.0035
+technology integration,integration,5,0.0035
+technology integration,javascript,5,0.0035
+technology integration,testing,5,0.0035
+technology integration,web services,5,0.0035
+technology integration,data analytics,4,0.0028
+technology integration,data entry,4,0.0028
+technology integration,git,4,0.0028
+technology integration,java,4,0.0028
+technology integration,linux,4,0.0028
+technology integration,software development,4,0.0028
